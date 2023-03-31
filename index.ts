@@ -1,6 +1,9 @@
 import express from "express";
 
-import { APP_PORT } from "./src/configs/app.config";
+import { APP_PORT } from "./src/configs/app/app.config";
+import { connectDb } from "./src/configs/db/connect-db";
+
+connectDb();
 
 const app = express();
 
