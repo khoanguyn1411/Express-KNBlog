@@ -1,11 +1,9 @@
+import { StrictOmit } from "../utils/types/strict-omit";
+
 /**
  * Object type.
  * The main benefit of Record<string, any> is idexable types, compare with pure `object` type.
  */
-
-import { StrictOmit } from "../utils/types/strict-omit";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type RecordObject = Record<string, any>;
 
 /** Chain of primitive and simple types. */

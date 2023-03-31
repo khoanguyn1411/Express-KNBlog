@@ -9,6 +9,7 @@ const userRoutePaths = buildRoutePaths({
     path: "user",
     children: {
       profile: { path: "profile" },
+      login: { path: "login" },
     },
   },
 } as const);

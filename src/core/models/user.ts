@@ -1,9 +1,11 @@
 import { model, Schema } from "mongoose";
 
+import { routePaths } from "../../routes/route-paths";
+
 interface User {
-  id: string;
-  email: string;
-  userName: string;
+  readonly id: string;
+  readonly email: string;
+  readonly userName: string;
 }
 
 const schema = new Schema<User>(
