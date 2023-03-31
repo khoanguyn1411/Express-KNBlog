@@ -33,6 +33,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "plugins": ["simple-import-sort"],
   "extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
   "rules": {
     "simple-import-sort/imports": "error",
