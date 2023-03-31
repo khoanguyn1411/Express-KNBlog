@@ -1,23 +1,61 @@
 {
-    "root": true,
-    "env": {
-        "browser": true,
-        "es2021": true
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"], // Your TypeScript files extension
+      "parserOptions": {
+        "project": ["./tsconfig.json"] // Specify it only for TypeScript files
+      }
     },
-    "overrides": [
-        {
-          "files": ["*.ts", "*.tsx"], // Your TypeScript files extension
-          "parserOptions": {
-            "project": ["./tsconfig.json"] // Specify it only for TypeScript files
+    {
+      "files": ["./src/core/dtos/*.dto.ts"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": ["interface", "enum", "typeAlias"],
+            "format": ["PascalCase"],
+            "suffix": ["Dto"]
+          },
+          {
+            "selector": ["classProperty", "enumMember"],
+            "format": ["PascalCase"]
           }
-        }
-      ],
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
-    "extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
-    "rules": {
-      "prettier/prettier": ["error", { "usePrettierrc": true }] // Use our .prettierrc file as source,
+        ]
+      }
     }
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "prettier/prettier": ["error", { "usePrettierrc": true }],
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "variable",
+        "types": ["boolean"],
+        "format": ["PascalCase"],
+        "prefix": ["is", "should", "has", "can", "did", "will", "_"]
+      },
+      {
+        "selector": ["function", "typeProperty"],
+        "format": ["camelCase"]
+      },
+      {
+        "selector": ["interface", "enum", "typeAlias", "enumMember"],
+        "format": ["PascalCase"]
+      }
+    ]
+  }
 }
