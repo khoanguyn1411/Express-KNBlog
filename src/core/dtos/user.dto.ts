@@ -1,5 +1,5 @@
 export interface UserDto {
-  readonly id: string;
+  readonly id: number;
   readonly email: string;
   readonly userName: string;
 }

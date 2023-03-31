@@ -2,7 +2,7 @@ import { MongoClient } from "mongodb";
 
 import { DB_URL } from "./db.config";
 
-export async function connectDb() {
+export async function connectDatabase() {
   const client = new MongoClient(DB_URL);
   try {
     await client.connect();

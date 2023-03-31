@@ -1,12 +1,12 @@
 import express from "express";
 
 import { APP_PORT } from "./src/configs/app/app.config";
-import { connectDb } from "./src/configs/db/connect-db";
-import { connectRoutes } from "./src/routes/routes-path";
+import { connectDatabase } from "./src/configs/db/connect-database";
+import { connectRoutes } from "./src/routes/routes";
 
 const app = express();
 
-connectDb();
+connectDatabase();
 connectRoutes(app);
 
 app.listen(APP_PORT, () => {
