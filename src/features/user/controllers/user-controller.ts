@@ -7,7 +7,6 @@ export namespace UserController {
     res.status(200).send(JSON.stringify("Get user profile successfully."));
   }
   export function login(req: Request, res: Response): void {
-    console.log("Here");
     const authorizationInfo = req.headers.authorization;
     const tokenId = authorizationInfo ? authorizationInfo.split(" ")[1] : null;
     if (tokenId == null) {
@@ -18,6 +17,5 @@ export namespace UserController {
       res.status(errorCode).send(error);
       return;
     }
-    res.status(200).send(tokenId);
   }
 }
