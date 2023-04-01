@@ -1,4 +1,4 @@
-import { ErrorCode, READABLE_ERROR_CODE } from "../../configs/app/error-code.config";
+import { ErrorCode, READABLE_ERROR_CODE } from "../../configs/app/code.config";
 
 export type ResponseErrorType = {
   readonly data?: Record<string, any>;

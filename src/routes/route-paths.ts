@@ -4,12 +4,20 @@ const baseRoutePaths = buildRoutePaths({
   root: { path: "" },
 } as const);
 
+const authRoutePaths = buildRoutePaths({
+  auth: {
+    path: "auth",
+    children: {
+      login: { path: "login" },
+    },
+  },
+} as const);
+
 const userRoutePaths = buildRoutePaths({
   user: {
     path: "user",
     children: {
       profile: { path: "profile" },
-      login: { path: "login" },
     },
   },
 } as const);
@@ -29,6 +37,7 @@ const blogRoutePaths = buildRoutePaths({
 /** Route paths can be used throughout the project. */
 export const routePaths = {
   ...baseRoutePaths,
+  ...authRoutePaths,
   ...userRoutePaths,
   ...blogRoutePaths,
 };
