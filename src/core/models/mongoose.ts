@@ -1,3 +1,3 @@
-export interface MongooseModelled {
+export interface MongooseBase {
   readonly id: string;
 }

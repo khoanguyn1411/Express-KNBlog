@@ -1,8 +1,8 @@
 import { model, Schema } from "mongoose";
 
-import { MongooseModelled } from "./mongoose";
+import { MongooseBase } from "./mongoose";
 
-export interface User extends MongooseModelled {
+export interface User extends MongooseBase {
   readonly email: string;
   readonly name: string;
 }
