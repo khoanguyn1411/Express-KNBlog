@@ -1,3 +1,4 @@
+import bodyParser from "body-parser";
 import express from "express";
 
 import { APP_PORT } from "./src/configs/app/app.config";
@@ -6,6 +7,9 @@ import { connectDatabase } from "./src/configs/db/connect-database";
 import { connectRoutes } from "./src/routes/routes";
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 connectDatabase();
 connectRoutes(app);

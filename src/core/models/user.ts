@@ -1,7 +1,5 @@
 import { model, Schema } from "mongoose";
 
-import { routePaths } from "../../routes/route-paths";
-
 interface User {
   readonly id: string;
   readonly email: string;

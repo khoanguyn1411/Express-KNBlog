@@ -1,5 +1,11 @@
 export interface UserDto {
-  readonly id: number;
+  readonly sub: string;
+  readonly name: string;
+  readonly given_name: string;
+  readonly google_id: string;
+  readonly family_name: string;
+  readonly picture: string;
   readonly email: string;
-  readonly userName: string;
+  readonly email_verified: string;
+  readonly locale: string;
 }

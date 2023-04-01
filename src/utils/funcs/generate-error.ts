@@ -1,3 +1,5 @@
+import { ErrorCode, READABLE_ERROR_CODE } from "../../configs/app/error-code.config";
+
 export type ResponseErrorType = {
   readonly data?: Record<string, any>;
   readonly detail: string;
@@ -6,14 +8,6 @@ export type ResponseErrorType = {
 type InputError<Error extends Readonly<Record<string, any>>> = {
   readonly data?: Error;
   readonly nonFieldError?: string;
-};
-
-const ERROR_CODE_MESSAGE: Record<number, string> = {
-  400: "Unfortunately, there are some problems with the data you committed.",
-  401: "Unauthorized.",
-  402: "This process require payment.",
-  403: "Forbidden.",
-  404: "Not found.",
 };
 
 function generateError<T extends Readonly<Record<string, any>>>(
@@ -41,10 +35,10 @@ function generateError<T extends Readonly<Record<string, any>>>(
 }
 
 export function generateErrorWithCode<T extends Readonly<Record<string, any>>>(
-  code: number,
+  code: ErrorCode,
   error?: InputError<T>,
 ): ResponseErrorType {
-  let detailMessage = ERROR_CODE_MESSAGE[code];
+  let detailMessage = READABLE_ERROR_CODE[code];
   if (detailMessage == null) {
     detailMessage = "Unknown error.";
   }
