@@ -1,3 +1,3 @@
-export interface MongooseBase {
-  readonly id: string;
-}
+import { Document } from "mongoose";
+
+export type MongooseBase = Document;

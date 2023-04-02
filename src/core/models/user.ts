@@ -2,18 +2,23 @@ import { model, Schema } from "mongoose";
 
 import { MongooseBase } from "./mongoose";
 
-export interface User extends MongooseBase {
+export interface IUser extends MongooseBase {
   readonly email: string;
   readonly name: string;
+  readonly lastLogin: string;
 }
 
-const schema = new Schema<User>(
+const schema = new Schema<IUser>(
   {
     email: {
       type: String,
       required: true,
     },
     name: {
+      type: String,
+      required: true,
+    },
+    lastLogin: {
       type: String,
       required: true,
     },

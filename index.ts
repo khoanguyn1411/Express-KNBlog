@@ -16,5 +16,5 @@ connectRoutes(app);
 addCors(app);
 
 app.listen(APP_PORT, () => {
-  console.log(`KNBlog is listening on port ${APP_PORT}`);
+  console.info(`KNBlog is listening on port ${APP_PORT}`);
 });

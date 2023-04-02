@@ -9,6 +9,14 @@ const authRoutePaths = buildRoutePaths({
     path: "auth",
     children: {
       login: { path: "login" },
+      token: {
+        path: "token",
+        children: {
+          refresh: {
+            path: "refresh",
+          },
+        },
+      },
     },
   },
 } as const);
