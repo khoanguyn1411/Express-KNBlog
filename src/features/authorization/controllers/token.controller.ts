@@ -1,26 +1,20 @@
 import { Response } from "express";
 
-import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
+import { SuccessCode } from "@/configs/app/code.config";
+import { RefreshTokenDto } from "@/core/dtos/token.dto";
+import { tokenMapper } from "@/core/mapper/token.mapper";
 import { IRefreshToken, IToken } from "@/core/models/token";
-import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate-error";
+import { ResponseErrorType } from "@/utils/funcs/generate-error";
+import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
 import { tokenHandler } from "@/utils/funcs/token-handler";
 import { AppRequest } from "@/utils/types/request";
 
-function generateUnauthorizedError(res: Response) {
-  const errorCode = ErrorCode.Unauthorized;
-  res.status(errorCode).send(generateErrorWithCode(errorCode));
-}
-
 export namespace TokenController {
   export async function refresh(
-    req: AppRequest<IRefreshToken>,
+    req: AppRequest<RefreshTokenDto>,
     res: Response<IToken | ResponseErrorType<IRefreshToken>>,
   ): Promise<void> {
-    const refreshToken = req.body.refreshToken;
-    if (refreshToken == null) {
-      generateUnauthorizedError(res);
-      return;
-    }
+    const { refreshToken } = tokenMapper.fromRefreshTokenDto(req.body);
     const newToken = await tokenHandler.resignNewTokenOnRefresh(refreshToken);
     if (newToken == null) {
       generateUnauthorizedError(res);
