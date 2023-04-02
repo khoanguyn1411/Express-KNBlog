@@ -1,0 +1,2 @@
+- Add `role` to user profile.
+- Brainstorm an approach to verify routes that required authentication.
