@@ -10,7 +10,7 @@ const NON_AUTHORIZED_ROUTES = [
   routePaths.blogs.url,
 ];
 
-function canProcessWithoutAuthorization(url: string): boolean {
+function canProceedWithoutAuthorization(url: string): boolean {
   return NON_AUTHORIZED_ROUTES.includes(url);
 }
 
@@ -19,7 +19,7 @@ export async function requireAuthorization(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  if (canProcessWithoutAuthorization(req.url)) {
+  if (canProceedWithoutAuthorization(req.url)) {
     next();
     return;
   }
