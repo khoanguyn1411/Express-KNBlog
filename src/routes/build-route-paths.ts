@@ -145,7 +145,7 @@ export function buildRoutePaths<T extends RoutePathsConfig>(
         [key]: {
           title: isRoutePathsRootConfig(value) ? value.title : undefined,
           path: value.path,
-          url: fullUrl,
+          url: `${fullUrl}/`,
           dynamicUrl: (param: Record<string, string>) =>
             `${parentRouteUrl + buildNavigateUrl(value.path, param)}/`,
           children: (param: Record<string, string>) => {
@@ -166,7 +166,7 @@ export function buildRoutePaths<T extends RoutePathsConfig>(
         [key]: {
           title: isRoutePathsRootConfig(value) ? value.title : undefined,
           path: value.path,
-          url: fullUrl,
+          url: `${fullUrl}/`,
           children: value.children ? buildRoutePaths(value.children, fullUrl) : undefined,
         },
       };
@@ -176,7 +176,7 @@ export function buildRoutePaths<T extends RoutePathsConfig>(
       [key]: {
         title: isRoutePathsRootConfig(value) ? value.title : undefined,
         path: value.path,
-        url: fullUrl,
+        url: `${fullUrl}/`,
         children: value.children ? buildRoutePaths(value.children, `${fullUrl}/`) : undefined,
       },
     };

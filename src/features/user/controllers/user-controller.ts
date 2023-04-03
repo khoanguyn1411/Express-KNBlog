@@ -1,9 +1,20 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 
-import { AppRequest } from "../../../utils/types/request";
+import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
+import { generateErrorWithCode } from "@/utils/funcs/generate-error";
+import { tokenHandler } from "@/utils/funcs/token-handler";
 
 export namespace UserController {
-  export function getProfile(req: AppRequest, res: Response): void {
-    res.status(200).send(JSON.stringify("Get user profile successfully."));
+  export async function getProfile(req: Request, res: Response): Promise<void> {
+    const user = await tokenHandler.decodeAccessTokenFromHeader(req);
+    if (user == null) {
+      res.status(ErrorCode.InternalServer).send(
+        generateErrorWithCode(ErrorCode.InternalServer, {
+          nonFieldError: "Could not find user profile.",
+        }),
+      );
+      return;
+    }
+    res.status(SuccessCode.OK).send(user);
   }
 }

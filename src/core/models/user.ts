@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { Document } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
 
@@ -10,14 +11,14 @@ export enum UserRole {
   Viewer = "viewer",
 }
 
-export interface IUser {
+export interface IUser extends MongooseBase {
   readonly email: string;
   readonly name: string;
   readonly lastLogin: string;
   readonly role: UserRole;
 }
 
-export type UserMongoose = MongooseBase & IUser;
+export type UserMongoose = Document & IUser;
 
 const schema = new Schema<IUser>(
   {

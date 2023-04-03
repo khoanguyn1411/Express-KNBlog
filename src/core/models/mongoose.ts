@@ -1,3 +1,4 @@
-import { Document } from "mongoose";
+import { ObjectId } from "mongodb";
 
-export type MongooseBase = Document;
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type MongooseBase = { _id: ObjectId };

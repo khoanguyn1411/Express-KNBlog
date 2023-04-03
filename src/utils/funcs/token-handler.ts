@@ -1,28 +1,25 @@
+import { Request } from "express";
 import jwt from "jsonwebtoken";
-import { ObjectId } from "mongodb";
 
 import { APP_JWT_ACCESS_TOKEN, APP_JWT_REFRESH_TOKEN } from "@/configs/app/app.config";
 import { IToken } from "@/core/models/token";
 import { IUser, User, UserMongoose } from "@/core/models/user";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-type User = IUser & { _id: ObjectId };
-
 export class TokenHandler {
-  public signToken(user: User, currentRefreshToken?: string): IToken {
+  public signToken(user: IUser, currentRefreshToken?: string): IToken {
     return {
       accessToken: this.signAccessToken(user),
       refreshToken: currentRefreshToken ?? this.signRefreshToken(user),
     };
   }
 
-  private signAccessToken(user: User) {
+  private signAccessToken(user: IUser) {
     return jwt.sign(user, APP_JWT_ACCESS_TOKEN, {
       expiresIn: "3h",
     });
   }
 
-  private signRefreshToken(user: User) {
+  private signRefreshToken(user: IUser) {
     return jwt.sign({ _id: user._id }, APP_JWT_REFRESH_TOKEN, {
       expiresIn: "1d",
     });
@@ -47,10 +44,26 @@ export class TokenHandler {
       return null;
     }
     const user = await User.findById(userId);
-    if (user == null) {
+    return user == null ? null : this.signToken(user, refreshToken);
+  }
+
+  public async decodeAccessTokenFromHeader(req: Request): Promise<IUser | null> {
+    const authorization = req.headers.authorization;
+    const accessToken = authorization ? authorization.split(" ")[1] : null;
+    if (accessToken == null) {
       return null;
     }
-    return this.signToken(user, refreshToken);
+    try {
+      const userDecoded = jwt.decode(accessToken);
+      const userDecodedCasted = userDecoded as IUser;
+      if (userDecoded == null || userDecodedCasted._id == null) {
+        return null;
+      }
+      const user = await User.findById(userDecodedCasted._id);
+      return user == null ? null : user.toObject<IUser>();
+    } catch (e) {
+      return null;
+    }
   }
 }
 

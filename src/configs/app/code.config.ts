@@ -4,6 +4,7 @@ export enum ErrorCode {
   PaymentRequired = 402,
   Forbidden = 403,
   NotFound = 404,
+  InternalServer = 500,
 }
 
 export enum SuccessCode {
@@ -20,4 +21,5 @@ export const READABLE_ERROR_CODE: Record<ErrorCode, string> = {
   [ErrorCode.PaymentRequired]: "This process require payment.",
   [ErrorCode.Forbidden]: "Forbidden.",
   [ErrorCode.NotFound]: "Not found.",
+  [ErrorCode.InternalServer]: "Unexpected error.",
 };
