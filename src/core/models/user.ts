@@ -1,12 +1,23 @@
 import { model, Schema } from "mongoose";
 
+import { enumToArray } from "@/utils/funcs/enum-to-array";
+
 import { MongooseBase } from "./mongoose";
 
-export interface IUser extends MongooseBase {
+export enum UserRole {
+  Admin = "admin",
+  Cooperator = "partner",
+  Viewer = "viewer",
+}
+
+export interface IUser {
   readonly email: string;
   readonly name: string;
   readonly lastLogin: string;
+  readonly role: UserRole;
 }
+
+export type UserMongoose = MongooseBase & IUser;
 
 const schema = new Schema<IUser>(
   {
@@ -20,6 +31,11 @@ const schema = new Schema<IUser>(
     },
     lastLogin: {
       type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: enumToArray(UserRole),
       required: true,
     },
   },

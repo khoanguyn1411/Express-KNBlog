@@ -1,27 +1,29 @@
 import jwt from "jsonwebtoken";
+import { ObjectId } from "mongodb";
 
 import { APP_JWT_ACCESS_TOKEN, APP_JWT_REFRESH_TOKEN } from "@/configs/app/app.config";
 import { IToken } from "@/core/models/token";
-import { IUser, User } from "@/core/models/user";
+import { IUser, User, UserMongoose } from "@/core/models/user";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+type User = IUser & { _id: ObjectId };
 
 export class TokenHandler {
-  public signToken(user: IUser, currentRefreshToken?: string): IToken {
+  public signToken(user: User, currentRefreshToken?: string): IToken {
     return {
       accessToken: this.signAccessToken(user),
       refreshToken: currentRefreshToken ?? this.signRefreshToken(user),
     };
   }
 
-  private signAccessToken(user: IUser) {
-    const userAsObject = user.toObject<IUser>();
-    return jwt.sign(userAsObject, APP_JWT_ACCESS_TOKEN, {
+  private signAccessToken(user: User) {
+    return jwt.sign(user, APP_JWT_ACCESS_TOKEN, {
       expiresIn: "3h",
     });
   }
 
-  private signRefreshToken(user: IUser) {
-    const userAsObject = user.toObject<IUser>();
-    return jwt.sign({ _id: userAsObject._id }, APP_JWT_REFRESH_TOKEN, {
+  private signRefreshToken(user: User) {
+    return jwt.sign({ _id: user._id }, APP_JWT_REFRESH_TOKEN, {
       expiresIn: "1d",
     });
   }
@@ -32,7 +34,7 @@ export class TokenHandler {
       if (userIdDecoded == null) {
         return null;
       }
-      return (userIdDecoded as Pick<IUser, "_id">)._id;
+      return (userIdDecoded as Pick<UserMongoose, "_id">)._id;
     } catch (e) {
       console.error(e);
       return null;

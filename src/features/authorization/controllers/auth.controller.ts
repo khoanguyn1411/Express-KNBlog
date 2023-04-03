@@ -7,7 +7,7 @@ import { loginMapper } from "@/core/mapper/login.mapper";
 import { userMapper } from "@/core/mapper/user.mapper";
 import { ILogin } from "@/core/models/login";
 import { IToken } from "@/core/models/token";
-import { User } from "@/core/models/user";
+import { IUser, User, UserRole } from "@/core/models/user";
 import { ResponseErrorType } from "@/utils/funcs/generate-error";
 import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
 import { tokenHandler } from "@/utils/funcs/token-handler";
@@ -30,11 +30,13 @@ export namespace AuthController {
     );
     if (currentUser == null) {
       const newUser = await userMapper.fromDto(userInfoDto).save();
-      const token = tokenHandler.signToken(newUser);
+      const userAsObject = newUser.toObject<IUser>();
+      const token = tokenHandler.signToken({ ...userAsObject, role: UserRole.Viewer });
       res.status(SuccessCode.Created).send(token);
       return;
     }
-    const token = tokenHandler.signToken(currentUser);
+    const userAsObject = currentUser.toObject<IUser>();
+    const token = tokenHandler.signToken(userAsObject);
     res.status(SuccessCode.OK).send(token);
   }
 }

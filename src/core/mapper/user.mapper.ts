@@ -1,9 +1,9 @@
 import { UserDto } from "../dtos/user.dto";
-import { IUser, User } from "../models/user";
+import { User, UserMongoose } from "../models/user";
 import { IMapperFromDto } from "./mapper";
 
-class UserMapper implements IMapperFromDto<UserDto, IUser> {
-  fromDto(data: UserDto): IUser {
+class UserMapper implements IMapperFromDto<UserDto, UserMongoose> {
+  fromDto(data: UserDto): UserMongoose {
     return new User({ email: data.email, name: data.name, lastLogin: new Date().toISOString() });
   }
 }
