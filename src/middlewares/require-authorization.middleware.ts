@@ -14,7 +14,7 @@ function canProceedWithoutAuthorization(url: string): boolean {
   return NON_AUTHORIZED_ROUTES.includes(url);
 }
 
-export async function requireAuthorization(
+export async function requireAuthorizationMiddleware(
   req: Request,
   res: Response,
   next: NextFunction,
