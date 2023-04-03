@@ -38,6 +38,7 @@ const schema = new Schema<IUser>(
       type: String,
       enum: enumToArray(UserRole),
       required: true,
+      default: UserRole.Viewer,
     },
   },
   { timestamps: true },
