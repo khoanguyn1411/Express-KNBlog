@@ -32,10 +32,8 @@ type RequestInput<TSchema> = {
 };
 
 function getValidationCustomMessage(errorItem: ValidationErrorItem) {
-  return [
-    VALIDATION_ERROR_MAPPED[errorItem.type as ValidationErrorCode](errorItem.context) ??
-      errorItem.message,
-  ];
+  const errorCode = errorItem.type as ValidationErrorCode;
+  return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
 }
 
 export function validateRequest<TSchema extends Record<string, any>>({
