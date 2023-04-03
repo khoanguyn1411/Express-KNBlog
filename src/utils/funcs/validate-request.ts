@@ -1,12 +1,42 @@
 import { Request } from "express";
-import Joi from "joi";
+import Joi, { ValidationErrorItem } from "joi";
 
 import { ErrorData } from "./generate-error";
+
+enum ValidationErrorCode {
+  Required = "any.required",
+  Email = "string.email",
+  String = "string.base",
+  Domain = "string.domain",
+  Empty = "string.empty",
+  Max = "string.max",
+  Min = "string.min",
+  Number = "number.base",
+}
+
+const VALIDATION_ERROR_MAPPED: Record<ValidationErrorCode, (context: any) => string> = {
+  [ValidationErrorCode.Required]: () => "This field is required.",
+  [ValidationErrorCode.Email]: () => "This field must be a valid email.",
+  [ValidationErrorCode.Empty]: () => "This field should not be empty.",
+  [ValidationErrorCode.String]: () => "This field must be string.",
+  [ValidationErrorCode.Number]: () => "This field must be number.",
+  [ValidationErrorCode.Min]: (context) => `This field must includes ${context.limit} characters .`,
+  [ValidationErrorCode.Max]: (context) =>
+    `This field cannot exceed ${context.limit} characters long.`,
+  [ValidationErrorCode.Domain]: () => "This field must be a valid domain.",
+};
 
 type RequestInput<TSchema> = {
   schema: Joi.ObjectSchema<TSchema>;
   req: Request;
 };
+
+function getValidationCustomMessage(errorItem: ValidationErrorItem) {
+  return [
+    VALIDATION_ERROR_MAPPED[errorItem.type as ValidationErrorCode](errorItem.context) ??
+      errorItem.message,
+  ];
+}
 
 export function validateRequest<TSchema extends Record<string, any>>({
   schema,
@@ -20,7 +50,10 @@ export function validateRequest<TSchema extends Record<string, any>>({
     if (cur.context == null || cur.context.key == null) {
       return acc;
     }
-    return { ...acc, [cur.context.key]: [cur.message] };
+    return {
+      ...acc,
+      [cur.context.key]: getValidationCustomMessage(cur),
+    };
   }, {}) as ErrorData<TSchema>;
   return validationError;
 }
