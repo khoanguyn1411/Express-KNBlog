@@ -7,9 +7,9 @@ import { blogRoutes } from "../features/blog/blog.routes";
 import { userRoutes } from "../features/user/user.routes";
 
 const router = Router();
-const allRoutesGuards = router.all("*", requireAuthorizationMiddleware);
+const routesGuards = router.all("*", requireAuthorizationMiddleware);
 
 export function connectRoutes(app: Express) {
-  const routes = [allRoutesGuards, userRoutes, blogRoutes, authRoutes];
-  app.use(...routes);
+  const routes = [userRoutes, blogRoutes, authRoutes];
+  app.use(routesGuards, ...routes);
 }
