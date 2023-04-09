@@ -44,7 +44,7 @@ export class TokenHandler {
       return null;
     }
     const user = await User.findById(userId);
-    return user == null ? null : this.signToken(user, refreshToken);
+    return user == null ? null : this.signToken(user.toObject<IUser>(), refreshToken);
   }
 
   public async decodeAccessTokenFromHeader(req: Request): Promise<IUser | null> {
