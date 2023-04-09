@@ -6,7 +6,6 @@
     "build": "npx tsc",
     "preview": "node dist/index.js",
     "start": "nodemon index.ts",
-    "lint": "next lint",
     "eslint:fix": "eslint --fix \"./src/**/*.{ts,tsx,json}\""
   },
   "author": "khoanguyen",
