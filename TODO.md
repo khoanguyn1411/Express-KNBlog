@@ -1,1 +1,1 @@
-- Brainstorm an approach to verify routes that required authentication.
+Build and brainstorm structure for blogs api.
