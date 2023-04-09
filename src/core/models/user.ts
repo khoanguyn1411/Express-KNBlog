@@ -18,7 +18,7 @@ export interface IUser extends MongooseBase {
   readonly role: UserRole;
 }
 
-export type UserMongoose = Document & IUser;
+export type MUser = Document & IUser;
 
 const schema = new Schema<IUser>(
   {

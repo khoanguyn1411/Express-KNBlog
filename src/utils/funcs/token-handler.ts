@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { APP_JWT_ACCESS_TOKEN, APP_JWT_REFRESH_TOKEN } from "@/configs/app/app.config";
 import { IToken } from "@/core/models/token";
-import { IUser, User, UserMongoose } from "@/core/models/user";
+import { IUser, MUser, User } from "@/core/models/user";
 
 export class TokenHandler {
   public signToken(user: IUser, currentRefreshToken?: string): IToken {
@@ -31,7 +31,7 @@ export class TokenHandler {
       if (userIdDecoded == null) {
         return null;
       }
-      return (userIdDecoded as Pick<UserMongoose, "_id">)._id;
+      return (userIdDecoded as Pick<MUser, "_id">)._id;
     } catch (e) {
       console.error(e);
       return null;
