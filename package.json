@@ -6,6 +6,8 @@
     "build": "npx tsc",
     "preview": "node dist/index.js",
     "start": "nodemon index.ts",
+    "db:exec": "docker exec -it knblog-db bash",
+    "db:shell": "mongosh",
     "eslint:fix": "eslint --fix \"./src/**/*.{ts,tsx,json}\""
   },
   "author": "khoanguyen",
