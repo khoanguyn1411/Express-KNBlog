@@ -1,0 +1,20 @@
+version: "3.3"
+services:
+  mongo-db:
+    image: mongo:latest
+    container_name: kb-blog-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+  node-backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    container_name: kb-blog-backend
+    volumes:
+      - ./src:/usr/src/app/server/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo-db
