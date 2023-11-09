@@ -2,7 +2,7 @@ version: "3.3"
 services:
   mongo-db:
     image: mongo:latest
-    container_name: kb-blog-db
+    container_name: knblog-db
     ports:
       - "27017:27017"
     volumes:
@@ -11,7 +11,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
-    container_name: kb-blog-backend
+    container_name: knblog-backend
     volumes:
       - ./src:/usr/src/app/server/src
     ports:
