@@ -1,16 +1,24 @@
 rebuild() {
    sudo docker image prune -f
    sudo docker compose build --no-cache
-   sudo docker compose up -d
+   start:silent
 }
 
 stop() {
    sudo docker compose down
 }
 
-start() {
-   sudo docker compose up -d
+exec:db() {
+   sudo docker exec -it knblog-db bash
 }
 
+start:db() {
+   sudo docker compose up mongo-db -d
+}
+
+start() {
+   start:db
+   sudo docker compose up node-backend
+}
 
 $@

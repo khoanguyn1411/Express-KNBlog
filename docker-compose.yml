@@ -12,6 +12,8 @@ services:
       context: ./
       dockerfile: Dockerfile.dev
     container_name: knblog-backend
+    environment:
+      - DB_URL=mongodb://mongo-db:27017/
     volumes:
       - ./src:/usr/src/app/server/src
     ports:
