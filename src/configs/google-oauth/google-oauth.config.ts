@@ -1,4 +1,4 @@
-import { connectEnv } from "../../utils/funcs/connect-env";
+import { connectEnv } from "../connect-env";
 
 connectEnv();
 

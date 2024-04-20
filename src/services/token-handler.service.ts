@@ -5,7 +5,7 @@ import { APP_JWT_ACCESS_TOKEN, APP_JWT_REFRESH_TOKEN } from "@/configs/app/app.c
 import { IToken } from "@/core/models/token";
 import { IUser, MUser, User } from "@/core/models/user";
 
-export class TokenHandler {
+export class TokenHandlerService {
   public signToken(user: IUser, currentRefreshToken?: string): IToken {
     return {
       accessToken: this.signAccessToken(user),
@@ -67,4 +67,4 @@ export class TokenHandler {
   }
 }
 
-export const tokenHandler = new TokenHandler();
+export const tokenHandlerService = new TokenHandlerService();

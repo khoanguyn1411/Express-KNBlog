@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import { routePaths } from "@/routes/route-paths";
+import { tokenHandlerService } from "@/services/token-handler.service";
 import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
-import { tokenHandler } from "@/utils/funcs/token-handler";
 
 const NON_AUTHORIZED_ROUTES = [
   routePaths.auth.children.login.url,
@@ -23,7 +23,7 @@ export async function requireAuthorizationMiddleware(
     next();
     return;
   }
-  const user = await tokenHandler.decodeAccessTokenFromHeader(req);
+  const user = await tokenHandlerService.decodeAccessTokenFromHeader(req);
   if (user == null) {
     generateUnauthorizedError(res);
     return;
