@@ -1,7 +1,9 @@
-import { Request } from "express";
+import { NextFunction, Request, Response } from "express";
 import Joi, { ValidationErrorItem } from "joi";
 
-import { ErrorData } from "./generate-error";
+import { ErrorCode } from "@/configs/app/code.config";
+
+import { ErrorData, generateErrorWithCode } from "./generate-error";
 
 enum ValidationErrorCode {
   Required = "any.required",
@@ -54,4 +56,19 @@ export function validateRequest<TSchema extends Record<string, any>>({
     };
   }, {}) as ErrorData<TSchema>;
   return validationError;
+}
+
+export function validateRequestWithSchema<T extends Record<string, any>>(
+  schema: Joi.ObjectSchema<T>,
+) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const validationError = validateRequest({ schema, req });
+    if (validationError == null) {
+      next();
+      return;
+    }
+    res
+      .status(ErrorCode.BadData)
+      .send(generateErrorWithCode(ErrorCode.BadData, { data: validationError }));
+  };
 }
