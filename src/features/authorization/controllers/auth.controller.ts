@@ -31,7 +31,7 @@ export namespace AuthController {
     if (currentUser == null) {
       const newUser = await userMapper.fromDto(userInfoDto).save();
       const userAsObject = newUser.toObject<IUser>();
-      const token = tokenHandlerService.signToken({ ...userAsObject, role: UserRole.Viewer });
+      const token = tokenHandlerService.signToken(userAsObject);
       res.status(SuccessCode.Created).send(token);
       return;
     }
