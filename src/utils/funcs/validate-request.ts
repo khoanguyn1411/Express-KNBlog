@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import Joi, { ValidationErrorItem } from "joi";
 
 import { ErrorCode } from "@/configs/app/code.config";
-import { paginationDtoSchema } from "@/core/dtos/pagination.dto";
 import { RecordObject } from "@/routes/build-route-paths";
 
 import { ErrorData, generateErrorWithCode } from "./generate-error";

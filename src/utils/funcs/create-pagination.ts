@@ -14,17 +14,18 @@ const DEFAULT_PAGINATION_OPTION = {
 };
 
 export async function createPagination<T extends RecordObject, E, K extends PaginationDto>(
-  schema: Query<T[], E>,
+  schemaCallback: () => Query<T[], E>,
   req: AppRequest<unknown, K>,
 ): Promise<Pagination<T>> {
   const paginationConfigDto = req.query;
   const offset = Number(paginationConfigDto.offset) ?? DEFAULT_PAGINATION_OPTION.offset;
   const limit = Number(paginationConfigDto.limit) ?? DEFAULT_PAGINATION_OPTION.limit;
-  const results = await schema.limit(limit).skip(offset);
+  const count = await schemaCallback().count();
+  const results = await schemaCallback().limit(limit).skip(offset);
   return {
     offset,
     limit,
-    count: results.length,
+    count,
     results,
   };
 }

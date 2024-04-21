@@ -27,7 +27,7 @@ export namespace BlogController {
     req: AppRequest<unknown, PaginationDto>,
     res: Response<Pagination<IBlog>>,
   ): Promise<void> {
-    const pagination = await createPagination(Blog.find({}), req);
+    const pagination = await createPagination(() => Blog.find({}), req);
     res.status(SuccessCode.Accepted).send(pagination);
   }
 }
