@@ -1,3 +1,5 @@
+import Joi from "joi";
+
 import { MongooseId } from "../models/mongoose";
 
 export interface BlogDto {
@@ -7,3 +9,8 @@ export interface BlogDto {
 }
 
 export type BlogCreationDto = Pick<BlogDto, "title" | "description">;
+
+export const blogCreationDtoSchema = Joi.object<BlogDto>({
+  title: Joi.string().required(),
+  description: Joi.string().required(),
+});
