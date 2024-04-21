@@ -2,6 +2,7 @@ import { Query } from "mongoose";
 
 import { PaginationDto, paginationDtoSchema } from "@/core/dtos/pagination.dto";
 import { Pagination } from "@/core/models/pagination";
+import { RecordObject } from "@/routes/build-route-paths";
 
 import { Nullable } from "../types/nullable";
 import { AppRequest } from "../types/request";
@@ -12,7 +13,7 @@ const DEFAULT_PAGINATION_OPTION = {
   limit: 10,
 };
 
-export async function createPagination<T extends Record<string, any>, E, K extends PaginationDto>(
+export async function createPagination<T extends RecordObject, E, K extends PaginationDto>(
   schema: Query<T[], E>,
   req: AppRequest<unknown, K>,
 ): Promise<Pagination<T>> {

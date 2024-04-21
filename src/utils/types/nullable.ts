@@ -1,3 +1,5 @@
-export type Nullable<T extends Record<string, any>> = {
+import { RecordObject } from "@/routes/build-route-paths";
+
+export type Nullable<T extends RecordObject> = {
   [K in keyof T]: T[K] | null | undefined;
 };

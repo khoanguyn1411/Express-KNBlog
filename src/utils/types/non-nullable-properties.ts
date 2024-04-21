@@ -1,8 +1,6 @@
-export type NonNullableProperties<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  T extends Record<string, any>,
-  K extends keyof T,
-> = Readonly<
+import { RecordObject } from "@/routes/build-route-paths";
+
+export type NonNullableProperties<T extends RecordObject, K extends keyof T> = Readonly<
   {
     [k in K]-?: NonNullable<T[k]>;
   } & {

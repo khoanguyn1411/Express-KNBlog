@@ -1,24 +1,26 @@
 import { Document } from "mongoose";
 
+import { RecordObject } from "@/routes/build-route-paths";
+
 import { ErrorCode, READABLE_ERROR_CODE } from "../../configs/app/code.config";
 import { Nullable } from "../types/nullable";
 import { StrictOmit } from "../types/strict-omit";
 
-export type ResponseErrorType<T extends Record<string, any>> = {
+export type ResponseErrorType<T extends RecordObject> = {
   readonly data?: InputError<T>["data"] & Pick<InputError<T>, "nonFieldError">;
   readonly detail: string;
 };
 
-export type ErrorData<TError extends Record<string, any>> = TError extends Document
+export type ErrorData<TError extends RecordObject> = TError extends Document
   ? StrictOmit<Nullable<TError>, keyof Document>
   : Nullable<TError>;
 
-type InputError<TError extends Record<string, any>> = {
+type InputError<TError extends RecordObject> = {
   readonly data?: ErrorData<TError>;
   readonly nonFieldError?: string;
 };
 
-function generateError<T extends Record<string, any>>(
+function generateError<T extends RecordObject>(
   errorDetail: string,
   error?: InputError<T>,
 ): ResponseErrorType<T> {
@@ -42,7 +44,7 @@ function generateError<T extends Record<string, any>>(
   };
 }
 
-export function generateErrorWithCode<T extends Record<string, any>>(
+export function generateErrorWithCode<T extends RecordObject>(
   code: ErrorCode,
   error?: InputError<T>,
 ): ResponseErrorType<T> {
