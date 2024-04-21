@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { APP_JWT_ACCESS_TOKEN, APP_JWT_REFRESH_TOKEN } from "@/configs/app/app.config";
 import { IToken } from "@/core/models/token";
 import { IUser, MUser, User } from "@/core/models/user";
+import { AppRequest } from "@/utils/types/request";
 
 export class TokenHandlerService {
   public signToken(user: IUser, currentRefreshToken?: string): IToken {
@@ -47,7 +48,7 @@ export class TokenHandlerService {
     return user == null ? null : this.signToken(user.toObject<IUser>(), refreshToken);
   }
 
-  public async decodeAccessTokenFromHeader(req: Request): Promise<IUser | null> {
+  public async decodeAccessTokenFromHeader(req: Request | AppRequest): Promise<IUser | null> {
     const authorization = req.headers.authorization;
     const accessToken = authorization ? authorization.split(" ")[1] : null;
     if (accessToken == null) {
