@@ -7,7 +7,7 @@ import { loginMapper } from "@/core/mapper/login.mapper";
 import { userMapper } from "@/core/mapper/user.mapper";
 import { ILogin } from "@/core/models/login";
 import { IToken } from "@/core/models/token";
-import { IUser, User, UserRole } from "@/core/models/user";
+import { IUser, User } from "@/core/models/user";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { ResponseErrorType } from "@/utils/funcs/generate-error";
 import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
