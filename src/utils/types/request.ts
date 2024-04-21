@@ -1,3 +1,8 @@
 import { Request } from "express";
 
-export type AppRequest<T = unknown> = Request<unknown, unknown, T>;
+export type AppRequest<TBody = unknown, TQuery = unknown> = Request<
+  unknown,
+  unknown,
+  TBody,
+  TQuery
+>;

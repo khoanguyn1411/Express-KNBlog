@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { loginDtoSchema } from "@/core/dtos/login.dto";
 import { refreshTokenDtoSchema } from "@/core/dtos/token.dto";
-import { validateRequestWithSchema } from "@/utils/funcs/validate-request";
+import { validateRequestBodyWithSchema } from "@/utils/funcs/validate-request";
 
 import { routePaths } from "../../routes/route-paths";
 import { AuthController } from "./controllers/auth.controller";
@@ -11,10 +11,10 @@ import { TokenController } from "./controllers/token.controller";
 const router = Router();
 const authUrl = routePaths.auth.children;
 
-router.post(authUrl.login.url, validateRequestWithSchema(loginDtoSchema), AuthController.login);
+router.post(authUrl.login.url, validateRequestBodyWithSchema(loginDtoSchema), AuthController.login);
 router.post(
   authUrl.token.children.refresh.url,
-  validateRequestWithSchema(refreshTokenDtoSchema),
+  validateRequestBodyWithSchema(refreshTokenDtoSchema),
   TokenController.refresh,
 );
 

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Joi, { ValidationErrorItem } from "joi";
 
 import { ErrorCode } from "@/configs/app/code.config";
+import { paginationDtoSchema } from "@/core/dtos/pagination.dto";
 
 import { ErrorData, generateErrorWithCode } from "./generate-error";
 
@@ -38,11 +39,9 @@ function getValidationCustomMessage(errorItem: ValidationErrorItem) {
   return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
 }
 
-export function validateRequest<TSchema extends Record<string, any>>({
-  schema,
-  req,
-}: RequestInput<TSchema>) {
-  const { error } = schema.validate(req.body);
+export function generateValidationError<TSchema extends Record<string, any>>(
+  error?: Joi.ValidationError,
+) {
   if (error == null) {
     return null;
   }
@@ -58,11 +57,19 @@ export function validateRequest<TSchema extends Record<string, any>>({
   return validationError;
 }
 
-export function validateRequestWithSchema<T extends Record<string, any>>(
+export function validateRequestBody<TSchema extends Record<string, any>>({
+  schema,
+  req,
+}: RequestInput<TSchema>) {
+  const { error } = schema.validate(req.body);
+  return generateValidationError(error);
+}
+
+export function validateRequestBodyWithSchema<T extends Record<string, any>>(
   schema: Joi.ObjectSchema<T>,
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const validationError = validateRequest({ schema, req });
+    const validationError = validateRequestBody({ schema, req });
     if (validationError == null) {
       next();
       return;
