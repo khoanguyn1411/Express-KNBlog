@@ -8,6 +8,7 @@ class BlogMapper implements IMapperFromDto<BlogDto, MBlog> {
       writtenBy: data.writtenBy,
       title: data.title,
       description: data.description,
+      summary: data.summary,
     });
   }
 }

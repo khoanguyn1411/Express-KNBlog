@@ -8,6 +8,7 @@ export interface IBlog extends MongooseBase {
   readonly writtenBy: IUser["_id"];
   readonly title: string;
   readonly description: string;
+  readonly summary: string;
 }
 
 export type MBlog = Document & IBlog;
@@ -25,6 +26,10 @@ const schema = new Schema<IBlog>(
     description: {
       type: String,
       required: true,
+    },
+    summary: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true },
