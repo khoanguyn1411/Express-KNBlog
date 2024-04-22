@@ -5,6 +5,7 @@
   "scripts": {
     "build": "npx tsc",
     "preview": "node dist/index.js",
+    "start:mongod": "sudo systemctl start mongod",
     "start": "nodemon index.ts",
     "eslint:fix": "eslint --fix \"./src/**/*.{ts,tsx,json}\""
   },
