@@ -5,6 +5,10 @@
   "scripts": {
     "build": "npx tsc",
     "preview": "node dist/index.js",
+    "migrate": "migrate-mongo",
+    "migrate:init": "migrate-mongo init",
+    "migrate:apply": "migrate-mongo up",
+    "migrate:rollback": "migrate-mongo down",
     "start:mongod": "sudo systemctl start mongod",
     "start": "nodemon index.ts",
     "eslint:fix": "eslint --fix \"./src/**/*.{ts,tsx,json}\""
@@ -19,6 +23,7 @@
     "google-auth-library": "^8.7.0",
     "joi": "^17.9.1",
     "jsonwebtoken": "^9.0.0",
+    "migrate-mongo": "^11.0.0",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.3"
   },
