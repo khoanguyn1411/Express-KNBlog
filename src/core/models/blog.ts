@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
-import { Document, model, Schema } from "mongoose";
+import { Document, model, PopulateOptions, Schema } from "mongoose";
 
 import { MongooseBase } from "./mongoose";
 import { IUser } from "./user";
 
 export interface IBlog extends MongooseBase {
-  readonly writtenBy: IUser["_id"];
+  readonly writtenBy: IUser;
   readonly title: string;
   readonly description: string;
   readonly summary: string;
@@ -17,6 +17,7 @@ const schema = new Schema<IBlog>(
   {
     writtenBy: {
       type: ObjectId,
+      ref: "user",
       required: true,
     },
     title: {
@@ -35,4 +36,7 @@ const schema = new Schema<IBlog>(
   { timestamps: true },
 );
 
-export const Blog = model("blog", schema);
+export namespace Blog {
+  export const Model = model("blog", schema);
+  export const ShortPopulated: PopulateOptions = { path: "writtenBy", select: "name" };
+}

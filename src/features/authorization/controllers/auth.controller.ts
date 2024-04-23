@@ -24,7 +24,7 @@ export namespace AuthController {
       generateUnauthorizedError(res);
       return;
     }
-    const currentUser = await User.findOneAndUpdate(
+    const currentUser = await User.Model.findOneAndUpdate(
       { email: userInfoDto.email },
       { lastLogin: new Date().toISOString() },
     );

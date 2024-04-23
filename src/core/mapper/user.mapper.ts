@@ -4,7 +4,7 @@ import { IMapperFromDto } from "./mapper";
 
 class UserMapper implements IMapperFromDto<UserDto, MUser> {
   fromDto(data: UserDto): MUser {
-    return new User({
+    return new User.Model({
       email: data.email,
       name: data.name,
       lastLogin: new Date().toISOString(),

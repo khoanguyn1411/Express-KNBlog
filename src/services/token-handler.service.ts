@@ -44,7 +44,7 @@ export class TokenHandlerService {
     if (userId == null) {
       return null;
     }
-    const user = await User.findById(userId);
+    const user = await User.Model.findById(userId);
     return user == null ? null : this.signToken(user.toObject<IUser>(), refreshToken);
   }
 
@@ -60,7 +60,7 @@ export class TokenHandlerService {
       if (userDecoded == null || userDecodedCasted._id == null) {
         return null;
       }
-      const user = await User.findById(userDecodedCasted._id);
+      const user = await User.Model.findById(userDecodedCasted._id);
       return user == null ? null : user.toObject<IUser>();
     } catch (e) {
       return null;

@@ -4,7 +4,7 @@ import { IMapperFromDto } from "./mapper";
 
 class BlogMapper implements IMapperFromDto<BlogDto, MBlog> {
   fromDto(data: BlogDto): MBlog {
-    return new Blog({
+    return new Blog.Model({
       writtenBy: data.writtenBy,
       title: data.title,
       description: data.description,

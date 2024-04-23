@@ -27,7 +27,10 @@ export namespace BlogController {
     req: AppRequest<unknown, PaginationDto>,
     res: Response<Pagination<IBlog>>,
   ): Promise<void> {
-    const pagination = await createPagination(() => Blog.find({}), req);
+    const pagination = await createPagination(
+      () => Blog.Model.find({}).populate(Blog.ShortPopulated),
+      req,
+    );
     res.status(SuccessCode.Accepted).send(pagination);
   }
 
@@ -35,7 +38,7 @@ export namespace BlogController {
     req: AppRequest<unknown, unknown, BlogParamDto>,
     res: Response<IBlog | ResponseErrorType>,
   ): Promise<void> {
-    const blog = await Blog.findById(req.params.blogId);
+    const blog = await Blog.Model.findById(req.params.blogId);
     if (blog == null) {
       res
         .status(ErrorCode.NotFound)

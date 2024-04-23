@@ -1,5 +1,4 @@
-import { model, Schema } from "mongoose";
-import { Document } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
 
@@ -44,4 +43,6 @@ const schema = new Schema<IUser>(
   { timestamps: true },
 );
 
-export const User = model("user", schema);
+export namespace User {
+  export const Model = model("user", schema);
+}

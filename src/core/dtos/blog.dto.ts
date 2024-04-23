@@ -15,7 +15,7 @@ export interface BlogParamDto {
 
 export type BlogCreationDto = Pick<BlogDto, "title" | "description" | "summary">;
 
-export const blogCreationDtoSchema = Joi.object<BlogDto>({
+export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
   title: Joi.string().required(),
   description: Joi.string().required(),
   summary: Joi.string().optional(),
