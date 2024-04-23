@@ -11,6 +11,8 @@ export interface IBlog extends MongooseBase {
   readonly summary: string;
 }
 
+export type IBlogCreation = Pick<IBlog, "title" | "summary" | "description">;
+
 export type MBlog = Document & IBlog;
 
 const schema = new Schema<IBlog>(

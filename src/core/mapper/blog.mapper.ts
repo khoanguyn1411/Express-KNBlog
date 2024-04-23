@@ -1,15 +1,13 @@
-import { BlogDto } from "../dtos/blog.dto";
-import { Blog, MBlog } from "../models/blog";
-import { IMapperFromDto } from "./mapper";
+import { BlogCreationDto } from "../dtos/blog.dto";
+import { IBlogCreation } from "../models/blog";
 
-class BlogMapper implements IMapperFromDto<BlogDto, MBlog> {
-  fromDto(data: BlogDto): MBlog {
-    return new Blog.Model({
-      writtenBy: data.writtenBy,
+class BlogMapper {
+  fromCreationDto(data: BlogCreationDto): IBlogCreation {
+    return {
       title: data.title,
       description: data.description,
       summary: data.summary,
-    });
+    };
   }
 }
 

@@ -18,7 +18,8 @@ export namespace BlogController {
   ): Promise<void> {
     const user = await tokenHandlerService.decodeAccessTokenFromHeader(req);
     assertNonNull(user);
-    const newBlog = await blogMapper.fromDto({ ...req.body, writtenBy: user._id }).save();
+    const blogCreationData = blogMapper.fromCreationDto(req.body);
+    const newBlog = await Blog.Model.create({ ...blogCreationData, writtenBy: user._id });
     res.status(SuccessCode.Created).send(newBlog);
   }
 
