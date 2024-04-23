@@ -1,4 +1,4 @@
-import { Document, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
 import { StrictOmit } from "@/utils/types/strict-omit";
@@ -19,8 +19,6 @@ export interface IUser extends MongooseBase {
 }
 
 export type IUserCreation = StrictOmit<IUser, "_id">;
-
-export type MUser = Document & IUser;
 
 const schema = new Schema<IUser>(
   {
@@ -47,5 +45,6 @@ const schema = new Schema<IUser>(
 );
 
 export namespace User {
-  export const Model = model("user", schema);
+  export const ModelName = "user";
+  export const Model = model(ModelName, schema);
 }

@@ -8,7 +8,7 @@ import {
   JWT_REFRESH_TOKEN,
 } from "@/configs/app/app.config";
 import { IToken } from "@/core/models/token";
-import { IUser, MUser, User } from "@/core/models/user";
+import { IUser, User } from "@/core/models/user";
 import { AppRequest } from "@/utils/types/request";
 
 export class TokenHandlerService {
@@ -54,7 +54,7 @@ export class TokenHandlerService {
       if (userIdDecoded == null) {
         return null;
       }
-      return (userIdDecoded as Pick<MUser, "_id">)._id;
+      return (userIdDecoded as Pick<IUser, "_id">)._id.toString();
     } catch (e) {
       console.error(e);
       return null;
@@ -91,7 +91,7 @@ export class TokenHandlerService {
         return null;
       }
       const user = await User.Model.findById(userDecodedCasted._id);
-      return user == null ? null : user.toObject<IUser>();
+      return user;
     } catch (e) {
       return null;
     }

@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { Document, model, PopulateOptions, Schema } from "mongoose";
 
 import { MongooseBase } from "./mongoose";
-import { IUser } from "./user";
+import { IUser, User } from "./user";
 
 export interface IBlog extends MongooseBase {
   readonly writtenBy: IUser;
@@ -19,7 +19,7 @@ const schema = new Schema<IBlog>(
   {
     writtenBy: {
       type: ObjectId,
-      ref: "user",
+      ref: User.ModelName,
       required: true,
     },
     title: {
@@ -39,6 +39,7 @@ const schema = new Schema<IBlog>(
 );
 
 export namespace Blog {
-  export const Model = model("blog", schema);
+  export const ModelName = "blog";
+  export const Model = model(ModelName, schema);
   export const ShortPopulation: PopulateOptions = { path: "writtenBy", select: "name" };
 }
