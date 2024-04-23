@@ -9,6 +9,10 @@ export interface BlogDto {
   readonly summary: string;
 }
 
+export interface BlogParamDto {
+  readonly blogId: string;
+}
+
 export type BlogCreationDto = Pick<BlogDto, "title" | "description" | "summary">;
 
 export const blogCreationDtoSchema = Joi.object<BlogDto>({

@@ -6,7 +6,7 @@ import { ErrorCode, READABLE_ERROR_CODE } from "../../configs/app/code.config";
 import { Nullable } from "../types/nullable";
 import { StrictOmit } from "../types/strict-omit";
 
-export type ResponseErrorType<T extends RecordObject> = {
+export type ResponseErrorType<T extends RecordObject = RecordObject> = {
   readonly data?: InputError<T>["data"] & Pick<InputError<T>, "nonFieldError">;
   readonly detail: string;
 };

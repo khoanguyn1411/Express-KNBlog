@@ -1,4 +1,8 @@
+import { BlogParamDto } from "@/core/dtos/blog.dto";
+
 import { buildRoutePaths } from "./build-route-paths";
+
+export const BLOG_ID_PARAM_NAME: keyof BlogParamDto = "blogId";
 
 const baseRoutePaths = buildRoutePaths({
   root: { path: "" },
@@ -31,15 +35,10 @@ const userRoutePaths = buildRoutePaths({
 } as const);
 
 const blogRoutePaths = buildRoutePaths({
-  blog: {
-    path: "blog",
-    children: {
-      detail: { path: "detail" },
-    },
-  },
   blogs: {
     path: "blogs",
   },
+  blogDetail: { path: `blogs/:${BLOG_ID_PARAM_NAME}` },
 } as const);
 
 /** Route paths can be used throughout the project. */

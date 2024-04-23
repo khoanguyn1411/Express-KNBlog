@@ -9,6 +9,7 @@ import { BlogMiddleware } from "./middlewares/blog.middleware";
 
 const router = Router();
 router.get(routePaths.blogs.url, BlogMiddleware.getBlogs, BlogController.getBlogs);
+router.get(routePaths.blogDetail.url, BlogController.getBlog);
 router.post(
   routePaths.blogs.url,
   validateRequestBodyWithSchema(blogCreationDtoSchema),

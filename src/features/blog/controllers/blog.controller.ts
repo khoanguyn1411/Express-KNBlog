@@ -1,7 +1,7 @@
 import { Response } from "express";
 
-import { SuccessCode } from "@/configs/app/code.config";
-import { BlogCreationDto } from "@/core/dtos/blog.dto";
+import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
+import { BlogCreationDto, BlogParamDto } from "@/core/dtos/blog.dto";
 import { PaginationDto } from "@/core/dtos/pagination.dto";
 import { blogMapper } from "@/core/mapper/blog.mapper";
 import { Blog, IBlog } from "@/core/models/blog";
@@ -9,7 +9,7 @@ import { Pagination } from "@/core/models/pagination";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
 import { createPagination } from "@/utils/funcs/create-pagination";
-import { ResponseErrorType } from "@/utils/funcs/generate-error";
+import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate-error";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace BlogController {
@@ -29,5 +29,19 @@ export namespace BlogController {
   ): Promise<void> {
     const pagination = await createPagination(() => Blog.find({}), req);
     res.status(SuccessCode.Accepted).send(pagination);
+  }
+
+  export async function getBlog(
+    req: AppRequest<unknown, unknown, BlogParamDto>,
+    res: Response<IBlog | ResponseErrorType>,
+  ): Promise<void> {
+    const blog = await Blog.findById(req.params.blogId);
+    if (blog == null) {
+      res
+        .status(ErrorCode.NotFound)
+        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldError: "Invalid blog ID." }));
+      return;
+    }
+    res.status(SuccessCode.Accepted).send(blog);
   }
 }
