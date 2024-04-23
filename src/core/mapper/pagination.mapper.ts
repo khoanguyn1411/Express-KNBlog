@@ -1,12 +1,19 @@
 import { PaginationDto } from "../dtos/pagination.dto";
-import { PaginationQuery } from "../models/pagination";
+import { PaginationBase } from "../models/pagination";
 import { IMapperFromDto } from "./mapper";
 
-export class PaginationMapper implements IMapperFromDto<PaginationDto, PaginationQuery> {
-  fromDto(data: PaginationDto): PaginationQuery {
+const DEFAULT_PAGINATION_OPTION: PaginationBase = {
+  offset: 0,
+  limit: 10,
+};
+
+class PaginationMapper implements IMapperFromDto<PaginationDto, PaginationBase> {
+  fromDto(data: PaginationDto): PaginationBase {
     return {
-      offset: data.offset ?? null,
-      limit: data.limit ?? null,
+      offset: data.offset ?? DEFAULT_PAGINATION_OPTION.offset,
+      limit: data.limit ?? DEFAULT_PAGINATION_OPTION.limit,
     };
   }
 }
+
+export const paginationMapper = new PaginationMapper();

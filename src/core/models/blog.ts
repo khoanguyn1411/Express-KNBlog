@@ -38,5 +38,5 @@ const schema = new Schema<IBlog>(
 
 export namespace Blog {
   export const Model = model("blog", schema);
-  export const ShortPopulated: PopulateOptions = { path: "writtenBy", select: "name" };
+  export const ShortPopulation: PopulateOptions = { path: "writtenBy", select: "name" };
 }

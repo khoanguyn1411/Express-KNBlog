@@ -7,8 +7,8 @@ import { Blog, IBlog } from "@/core/models/blog";
 import { Pagination } from "@/core/models/pagination";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
-import { createPagination } from "@/utils/funcs/create-pagination";
 import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate-error";
+import { mapAndCreatePaginationFor } from "@/utils/funcs/map-and-create-pagination";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace BlogController {
@@ -26,8 +26,8 @@ export namespace BlogController {
     req: AppRequest<unknown, BlogQueryDto>,
     res: Response<Pagination<IBlog>>,
   ): Promise<void> {
-    const pagination = await createPagination(
-      () => Blog.Model.find({}).populate(Blog.ShortPopulated),
+    const pagination = await mapAndCreatePaginationFor(
+      () => Blog.Model.find({}).populate(Blog.ShortPopulation),
       req,
     );
     res.status(SuccessCode.Accepted).send(pagination);
@@ -37,7 +37,7 @@ export namespace BlogController {
     req: AppRequest<unknown, unknown, BlogParamDto>,
     res: Response<IBlog | ResponseErrorType>,
   ): Promise<void> {
-    const blog = await Blog.Model.findById(req.params.blogId);
+    const blog = await Blog.Model.findById(req.params.blogId).populate(Blog.ShortPopulation);
     if (blog == null) {
       res
         .status(ErrorCode.NotFound)
