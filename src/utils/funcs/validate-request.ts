@@ -36,11 +36,19 @@ type RequestInput<TSchema> = {
   req: AppRequest;
 };
 
+/**
+ * Retrieves a custom validation error message based on the error item.
+ * @param errorItem The validation error item.
+ */
 function getValidationCustomMessage(errorItem: ValidationErrorItem) {
   const errorCode = errorItem.type as ValidationErrorCode;
   return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
 }
 
+/**
+ * Sends a validation error response with a given validation error object.
+ * @param res The Express response object to send the response.
+ */
 function sendValidationErrorResponse<T extends Nullable<RecordObject> | undefined>(
   res: Response,
   validationError: T,
@@ -50,6 +58,10 @@ function sendValidationErrorResponse<T extends Nullable<RecordObject> | undefine
     .send(generateErrorWithCode(ErrorCode.BadData, { data: validationError }));
 }
 
+/**
+ * Generates a structured validation error object from a Joi validation error.
+ * @param error The Joi validation error object.
+ */
 export function generateValidationError<TSchema extends RecordObject>(error?: Joi.ValidationError) {
   if (error == null) {
     return null;
@@ -66,6 +78,11 @@ export function generateValidationError<TSchema extends RecordObject>(error?: Jo
   return validationError;
 }
 
+/**
+ * Validates the request body against a given Joi schema.
+ * @param schema The Joi schema to validate the request body against.
+ * @param req The Express request object containing the request body.
+ */
 export function validateRequestBody<TSchema extends RecordObject>({
   schema,
   req,
@@ -74,6 +91,10 @@ export function validateRequestBody<TSchema extends RecordObject>({
   return generateValidationError(error);
 }
 
+/**
+ * Middleware function to validate the request body against a given Joi schema.
+ * @param schema The Joi schema to validate the request body against.
+ */
 export function validateRequestBodyWithSchema<T extends RecordObject>(schema: Joi.ObjectSchema<T>) {
   return (req: AppRequest, res: Response, next: NextFunction) => {
     const validationError = validateRequestBody({ schema, req });
@@ -85,6 +106,11 @@ export function validateRequestBodyWithSchema<T extends RecordObject>(schema: Jo
   };
 }
 
+/**
+ * Validates the request query parameters against a given Joi schema.
+ * @param schema The Joi schema to validate the request query parameters against.
+ * @param req The Express request object containing the request query parameters.
+ */
 export function validateRequestQuery<TSchema extends RecordObject>({
   schema,
   req,
@@ -93,6 +119,10 @@ export function validateRequestQuery<TSchema extends RecordObject>({
   return generateValidationError(error);
 }
 
+/**
+ * Middleware function to validate the request query parameters against a given Joi schema.
+ * @param schema The Joi schema to validate the request query parameters against.
+ */
 export function validateRequestQueryWithSchema<T extends RecordObject>(
   schema: Joi.ObjectSchema<T>,
 ) {
