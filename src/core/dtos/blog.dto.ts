@@ -23,5 +23,5 @@ export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
 });
 
 export const blogQueryDtoSchema = paginationDtoSchema.append<BlogQueryDto>({
-  search: Joi.string().optional(),
+  search: Joi.string().optional().allow(""),
 });

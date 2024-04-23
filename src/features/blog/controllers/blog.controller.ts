@@ -28,8 +28,12 @@ export namespace BlogController {
     req: AppRequest<unknown, BlogQueryDto>,
     res: Response<Pagination<IBlog>>,
   ): Promise<void> {
+    const queryParamFromDto = blogMapper.fromQueryDto(req.query);
     const pagination = await mapAndCreatePaginationFor(
-      () => Blog.Model.find({}).populate(Blog.ShortPopulation),
+      () =>
+        Blog.Model.find({
+          title: { $regex: `^${queryParamFromDto.search}`, $options: "i" },
+        }).populate(Blog.ShortPopulation),
       req,
     );
     res.status(SuccessCode.Accepted).send(pagination);
