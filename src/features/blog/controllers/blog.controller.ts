@@ -20,7 +20,8 @@ export namespace BlogController {
     assertNonNull(user);
     const blogCreationData = blogMapper.fromCreationDto(req.body);
     const newBlog = await Blog.Model.create({ ...blogCreationData, writtenBy: user._id });
-    res.status(SuccessCode.Created).send(newBlog);
+    const blogData = await newBlog.populate(Blog.ShortPopulation);
+    res.status(SuccessCode.Created).send(blogData);
   }
 
   export async function getBlogs(
