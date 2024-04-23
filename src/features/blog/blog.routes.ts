@@ -15,7 +15,7 @@ router.get(
   validateRequestQueryWithSchema(blogQueryDtoSchema),
   BlogController.getBlogs,
 );
-router.get(routePaths.blogDetail.url, BlogController.getBlog);
+router.get(routePaths.blogDetail.url, BlogController.getBlogById);
 router.post(
   routePaths.blogs.url,
   validateRequestBodyWithSchema(blogCreationDtoSchema),

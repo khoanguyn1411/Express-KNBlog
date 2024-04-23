@@ -35,7 +35,7 @@ export namespace BlogController {
     res.status(SuccessCode.Accepted).send(pagination);
   }
 
-  export async function getBlog(
+  export async function getBlogById(
     req: AppRequest<unknown, unknown, BlogParamDto>,
     res: Response<IBlog | ResponseErrorType>,
   ): Promise<void> {
