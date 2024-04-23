@@ -1,15 +1,14 @@
-import { UserDto } from "../dtos/user.dto";
-import { MUser, User, UserRole } from "../models/user";
-import { IMapperFromDto } from "./mapper";
+import { UserCreationDto } from "../dtos/user.dto";
+import { IUserCreation, UserRole } from "../models/user";
 
-class UserMapper implements IMapperFromDto<UserDto, MUser> {
-  fromDto(data: UserDto): MUser {
-    return new User.Model({
+class UserMapper {
+  fromCreationDto(data: UserCreationDto): IUserCreation {
+    return {
       email: data.email,
       name: data.name,
-      lastLogin: new Date().toISOString(),
+      lastLogin: new Date(),
       role: UserRole.Viewer,
-    });
+    };
   }
 }
 

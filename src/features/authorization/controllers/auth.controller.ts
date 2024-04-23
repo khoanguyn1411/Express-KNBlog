@@ -24,13 +24,14 @@ export namespace AuthController {
       generateUnauthorizedError(res);
       return;
     }
+    const newUser = userMapper.fromCreationDto(userInfoDto);
     const currentUser = await User.Model.findOneAndUpdate(
-      { email: userInfoDto.email },
-      { lastLogin: new Date().toISOString() },
+      { email: newUser.email },
+      { lastLogin: new Date() },
     );
     if (currentUser == null) {
-      const newUser = await userMapper.fromDto(userInfoDto).save();
-      const userAsObject = newUser.toObject<IUser>();
+      const userData = await User.Model.create(newUser);
+      const userAsObject = userData.toObject<IUser>();
       const token = tokenHandlerService.signToken(userAsObject);
       res.status(SuccessCode.Created).send(token);
       return;

@@ -1,6 +1,7 @@
 import { Document, model, Schema } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
+import { StrictOmit } from "@/utils/types/strict-omit";
 
 import { MongooseBase } from "./mongoose";
 
@@ -13,9 +14,11 @@ export enum UserRole {
 export interface IUser extends MongooseBase {
   readonly email: string;
   readonly name: string;
-  readonly lastLogin: string;
+  readonly lastLogin: Date;
   readonly role: UserRole;
 }
+
+export type IUserCreation = StrictOmit<IUser, "_id">;
 
 export type MUser = Document & IUser;
 
@@ -30,7 +33,7 @@ const schema = new Schema<IUser>(
       required: true,
     },
     lastLogin: {
-      type: String,
+      type: Date,
       required: true,
     },
     role: {

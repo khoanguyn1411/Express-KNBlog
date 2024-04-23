@@ -1,4 +1,4 @@
-export interface UserDto {
+export interface UserCreationDto {
   readonly sub: string;
   readonly name: string;
   readonly given_name: string;

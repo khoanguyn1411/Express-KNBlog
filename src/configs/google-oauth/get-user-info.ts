@@ -1,6 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
 
-import { UserDto } from "../../core/dtos/user.dto";
+import { UserCreationDto } from "@/core/dtos/user.dto";
+
 import { StrictOmit } from "../../utils/types/strict-omit";
 import { GOOGLE_CLIENT_ID } from "./google-oauth.config";
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
@@ -8,7 +9,7 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 export async function getUserInfoFromOauthTokenId(
   tokenId: string,
   accessToken: string,
-): Promise<UserDto | null> {
+): Promise<UserCreationDto | null> {
   try {
     const ticket = await client.verifyIdToken({
       idToken: tokenId,
@@ -20,7 +21,7 @@ export async function getUserInfoFromOauthTokenId(
     }
     const url = `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`;
     const res = await fetch(url);
-    const data: StrictOmit<UserDto, "google_id"> = await res.json();
+    const data: StrictOmit<UserCreationDto, "google_id"> = await res.json();
     if (data.sub == null) {
       return null;
     }
