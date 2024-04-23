@@ -1,7 +1,12 @@
 import { Request } from "express";
 import jwt from "jsonwebtoken";
 
-import { APP_JWT_ACCESS_TOKEN, APP_JWT_REFRESH_TOKEN } from "@/configs/app/app.config";
+import {
+  JWT_ACCESS_REFRESH_TIME,
+  JWT_ACCESS_TOKEN,
+  JWT_ACCESS_TOKEN_TIME,
+  JWT_REFRESH_TOKEN,
+} from "@/configs/app/app.config";
 import { IToken } from "@/core/models/token";
 import { IUser, MUser, User } from "@/core/models/user";
 import { AppRequest } from "@/utils/types/request";
@@ -14,15 +19,15 @@ export class TokenHandlerService {
     };
   }
 
-  private signAccessToken(user: IUser) {
-    return jwt.sign(user, APP_JWT_ACCESS_TOKEN, {
-      expiresIn: "3h",
+  private signAccessToken(user: IUser): string {
+    return jwt.sign(user, JWT_ACCESS_TOKEN, {
+      expiresIn: JWT_ACCESS_TOKEN_TIME,
     });
   }
 
-  private signRefreshToken(user: IUser) {
-    return jwt.sign({ _id: user._id }, APP_JWT_REFRESH_TOKEN, {
-      expiresIn: "1d",
+  private signRefreshToken(user: IUser): string {
+    return jwt.sign({ _id: user._id }, JWT_REFRESH_TOKEN, {
+      expiresIn: JWT_ACCESS_REFRESH_TIME,
     });
   }
 
