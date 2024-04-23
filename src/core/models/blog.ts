@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { Document, model, PopulateOptions, Schema } from "mongoose";
+import { model, PopulateOptions, Schema } from "mongoose";
 
 import { MongooseBase } from "./mongoose";
 import { IUser, User } from "./user";
