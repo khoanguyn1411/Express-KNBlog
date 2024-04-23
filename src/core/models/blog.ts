@@ -13,8 +13,6 @@ export interface IBlog extends MongooseBase {
 
 export type IBlogCreation = Pick<IBlog, "title" | "summary" | "description">;
 
-export type MBlog = Document & IBlog;
-
 const schema = new Schema<IBlog>(
   {
     writtenBy: {
