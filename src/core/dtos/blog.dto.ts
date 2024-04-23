@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 import { MongooseId } from "../models/mongoose";
+import { PaginationDto, paginationDtoSchema } from "./pagination.dto";
 
 export interface BlogDto {
   readonly writtenBy: MongooseId;
@@ -13,10 +14,18 @@ export interface BlogParamDto {
   readonly blogId: string;
 }
 
+export interface BlogQueryDto extends PaginationDto {
+  readonly search: string | undefined;
+}
+
 export type BlogCreationDto = Pick<BlogDto, "title" | "description" | "summary">;
 
 export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
   title: Joi.string().required(),
   description: Joi.string().required(),
   summary: Joi.string().optional(),
+});
+
+export const blogQueryDtoSchema = paginationDtoSchema.append<BlogQueryDto>({
+  search: Joi.string().optional(),
 });

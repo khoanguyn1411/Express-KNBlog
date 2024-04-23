@@ -1,8 +1,7 @@
 import { Response } from "express";
 
 import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
-import { BlogCreationDto, BlogParamDto } from "@/core/dtos/blog.dto";
-import { PaginationDto } from "@/core/dtos/pagination.dto";
+import { BlogCreationDto, BlogParamDto, BlogQueryDto } from "@/core/dtos/blog.dto";
 import { blogMapper } from "@/core/mapper/blog.mapper";
 import { Blog, IBlog } from "@/core/models/blog";
 import { Pagination } from "@/core/models/pagination";
@@ -24,7 +23,7 @@ export namespace BlogController {
   }
 
   export async function getBlogs(
-    req: AppRequest<unknown, PaginationDto>,
+    req: AppRequest<unknown, BlogQueryDto>,
     res: Response<Pagination<IBlog>>,
   ): Promise<void> {
     const pagination = await createPagination(

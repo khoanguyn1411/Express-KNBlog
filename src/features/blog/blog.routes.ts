@@ -1,14 +1,20 @@
 import { Router } from "express";
 
-import { blogCreationDtoSchema } from "@/core/dtos/blog.dto";
-import { validateRequestBodyWithSchema } from "@/utils/funcs/validate-request";
+import { blogCreationDtoSchema, blogQueryDtoSchema } from "@/core/dtos/blog.dto";
+import {
+  validateRequestBodyWithSchema,
+  validateRequestQueryWithSchema,
+} from "@/utils/funcs/validate-request";
 
 import { routePaths } from "../../routes/route-paths";
 import { BlogController } from "./controllers/blog.controller";
-import { BlogMiddleware } from "./middlewares/blog.middleware";
 
 const router = Router();
-router.get(routePaths.blogs.url, BlogMiddleware.getBlogs, BlogController.getBlogs);
+router.get(
+  routePaths.blogs.url,
+  validateRequestQueryWithSchema(blogQueryDtoSchema),
+  BlogController.getBlogs,
+);
 router.get(routePaths.blogDetail.url, BlogController.getBlog);
 router.post(
   routePaths.blogs.url,

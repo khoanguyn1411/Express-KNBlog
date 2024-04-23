@@ -1,8 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 
 import { routePaths } from "@/routes/route-paths";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
+import { AppRequest } from "@/utils/types/request";
 
 const NON_AUTHORIZED_ROUTES = [
   routePaths.auth.children.login.url,
@@ -15,7 +16,7 @@ function canProceedWithoutAuthorization(url: string): boolean {
 }
 
 export async function requireAuthorizationMiddleware(
-  req: Request,
+  req: AppRequest,
   res: Response,
   next: NextFunction,
 ): Promise<void> {

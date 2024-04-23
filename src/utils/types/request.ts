@@ -1,6 +1,10 @@
 import { Request } from "express";
 
-export type AppRequest<TBody = unknown, TQuery = unknown, TParams = unknown> = Request<
+interface ParamsDictionary {
+  [key: string]: string;
+}
+
+export type AppRequest<TBody = unknown, TQuery = unknown, TParams = ParamsDictionary> = Request<
   TParams,
   unknown,
   TBody,

@@ -1,9 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import Joi, { ValidationErrorItem } from "joi";
 
 import { ErrorCode } from "@/configs/app/code.config";
 import { RecordObject } from "@/routes/build-route-paths";
 
+import { Nullable } from "../types/nullable";
+import { AppRequest } from "../types/request";
 import { ErrorData, generateErrorWithCode } from "./generate-error";
 
 enum ValidationErrorCode {
@@ -31,12 +33,21 @@ const VALIDATION_ERROR_MAPPED: Record<ValidationErrorCode, (context: any) => str
 
 type RequestInput<TSchema> = {
   schema: Joi.ObjectSchema<TSchema>;
-  req: Request;
+  req: AppRequest;
 };
 
 function getValidationCustomMessage(errorItem: ValidationErrorItem) {
   const errorCode = errorItem.type as ValidationErrorCode;
   return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
+}
+
+function sendValidationErrorResponse<T extends Nullable<RecordObject> | undefined>(
+  res: Response,
+  validationError: T,
+) {
+  res
+    .status(ErrorCode.BadData)
+    .send(generateErrorWithCode(ErrorCode.BadData, { data: validationError }));
 }
 
 export function generateValidationError<TSchema extends RecordObject>(error?: Joi.ValidationError) {
@@ -64,14 +75,33 @@ export function validateRequestBody<TSchema extends RecordObject>({
 }
 
 export function validateRequestBodyWithSchema<T extends RecordObject>(schema: Joi.ObjectSchema<T>) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: AppRequest, res: Response, next: NextFunction) => {
     const validationError = validateRequestBody({ schema, req });
     if (validationError == null) {
       next();
       return;
     }
-    res
-      .status(ErrorCode.BadData)
-      .send(generateErrorWithCode(ErrorCode.BadData, { data: validationError }));
+    sendValidationErrorResponse(res, validationError);
+  };
+}
+
+export function validateRequestQuery<TSchema extends RecordObject>({
+  schema,
+  req,
+}: RequestInput<TSchema>) {
+  const { error } = schema.validate(req.query);
+  return generateValidationError(error);
+}
+
+export function validateRequestQueryWithSchema<T extends RecordObject>(
+  schema: Joi.ObjectSchema<T>,
+) {
+  return (req: AppRequest, res: Response, next: NextFunction) => {
+    const validationError = validateRequestQuery({ schema, req });
+    if (validationError == null) {
+      next();
+      return;
+    }
+    sendValidationErrorResponse(res, validationError);
   };
 }
