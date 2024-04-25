@@ -1,6 +1,7 @@
 import { RootQuerySelector } from "mongoose";
 
-/**
+class SearchService {
+  /**
  * Built config for full text search feature of mongoose.
  * @param searchQuery Search query.
  * @example
@@ -35,11 +36,20 @@ import { RootQuerySelector } from "mongoose";
       req,
     );
  */
-export function builtFullTextSearchQuery<T>(searchQuery: string | null): RootQuerySelector<T> {
-  if (searchQuery === "" || searchQuery == null) {
-    return {};
+  public builtFullTextSearchQuery<T>(searchQuery: string | null): RootQuerySelector<T> {
+    if (searchQuery === "" || searchQuery == null) {
+      return {};
+    }
+    return { $text: { $search: searchQuery, $caseSensitive: false } };
   }
-  return {
-    $text: { $search: searchQuery, $caseSensitive: false },
-  };
+
+  /**
+   * Create search ability.
+   * @param searchQuery Search text query.
+   */
+  public createSearchFor<T>(searchQuery: string | null): RootQuerySelector<T> {
+    return { $regex: `^${searchQuery ?? ""}`, $options: "i" };
+  }
 }
+
+export const searchService = new SearchService();

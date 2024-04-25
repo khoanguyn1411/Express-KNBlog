@@ -5,6 +5,7 @@ import { BlogCreationDto, BlogParamDto, BlogQueryDto } from "@/core/dtos/blog.dt
 import { blogMapper } from "@/core/mapper/blog.mapper";
 import { Blog, IBlog } from "@/core/models/blog";
 import { Pagination } from "@/core/models/pagination";
+import { searchService } from "@/services/search.service";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
 import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate-error";
@@ -32,7 +33,7 @@ export namespace BlogController {
     const pagination = await mapAndCreatePaginationFor(
       () =>
         Blog.Model.find({
-          title: { $regex: `^${queryParamFromDto.search}`, $options: "i" },
+          title: searchService.createSearchFor(queryParamFromDto.search),
         }).populate(Blog.ShortPopulation),
       req,
     );
