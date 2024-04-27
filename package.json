@@ -10,8 +10,9 @@
     "migrate:create": "migrate-mongo create",
     "migrate:apply": "migrate-mongo up",
     "migrate:rollback": "migrate-mongo down",
+    "start": "npm run start:mongod && NODE_ENV=development nodemon index.ts",
+    "start:prod": "npm run start:mongod && NODE_ENV=production nodemon index.ts",
     "start:mongod": "sudo systemctl start mongod",
-    "start": "npm run start:mongod && nodemon index.ts",
     "eslint:fix": "eslint --fix \"./src/**/*.{ts,tsx,json}\""
   },
   "author": "khoanguyen",

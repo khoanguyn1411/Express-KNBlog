@@ -1,3 +1,5 @@
 import { config } from "dotenv";
 
-export const connectEnv = config;
+const customConfig = config({ path: `.env.${process.env.NODE_ENV}` });
+
+export const connectEnv = () => customConfig;
