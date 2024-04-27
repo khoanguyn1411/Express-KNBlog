@@ -1,5 +1,4 @@
 import { randomUUID } from "crypto";
-import { ReadStream } from "fs";
 import { google } from "googleapis";
 
 import {
@@ -34,7 +33,7 @@ class GoogleDriveService {
    * @param mimetype Mime type.
    * @returns
    */
-  public async uploadFile(fileToUpload: ReadStream, fileName?: string, mimetype = "text/plain") {
+  public async uploadFile(fileToUpload: any, fileName?: string, mimetype = "text/plain") {
     const drive = await this.initDrive();
     const fileMetaData = {
       name: fileName ?? randomUUID(),
