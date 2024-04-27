@@ -26,7 +26,14 @@ class GoogleDriveService {
     return google.drive({ version: "v3", auth: authClient });
   }
 
-  public async uploadFile(stream: ReadStream, fileName: string) {
+  /**
+   * Upload file to google drive folders.
+   * @param fileToUpload File.
+   * @param fileName File name.
+   * @param mimetype Mime type.
+   * @returns
+   */
+  public async uploadFile(fileToUpload: ReadStream, fileName: string, mimetype = "text/plain") {
     const drive = await this.initDrive();
     const fileMetaData = {
       name: fileName,
@@ -38,8 +45,8 @@ class GoogleDriveService {
         // @ts-expect-error
         resource: fileMetaData,
         media: {
-          body: stream,
-          mimeType: "text/plain",
+          body: fileToUpload,
+          mimeType: mimetype,
         },
         fields: "id",
       });
