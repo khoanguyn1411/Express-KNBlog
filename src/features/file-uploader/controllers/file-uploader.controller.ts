@@ -12,7 +12,7 @@ export namespace FileUploaderController {
     const filePath = path.join(__dirname, test);
     const stream = createReadStream(filePath);
     try {
-      await googleDriveService.uploadFile(stream, "Test.txt");
+      await googleDriveService.uploadFile(stream);
       res.sendStatus(200);
     } catch (e) {
       res.status(ErrorCode.InternalServer).send(e);
