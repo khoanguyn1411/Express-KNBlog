@@ -2,6 +2,7 @@ import { ReadStream } from "fs";
 import { google } from "googleapis";
 
 import {
+  GOOGLE_DRIVE_STORAGE_LOCATION_ID,
   GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
 } from "@/configs/google/google.config";
@@ -25,11 +26,11 @@ class GoogleDriveService {
     return google.drive({ version: "v3", auth: authClient });
   }
 
-  public async uploadFile(stream: ReadStream) {
+  public async uploadFile(stream: ReadStream, fileName: string) {
     const drive = await this.initDrive();
     const fileMetaData = {
-      name: "",
-      parents: "1Dc697ezr9DjZS6lGRwousPii3xLUDmjy",
+      name: fileName,
+      parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
     };
     try {
       const res = drive.files.create({

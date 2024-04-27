@@ -26,6 +26,8 @@ declare global {
       readonly GOOGLE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL: string;
       readonly GOOGLE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL: string;
       readonly GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN: string;
+
+      readonly GOOGLE_DRIVE_STORAGE_LOCATION_ID: string;
     }
   }
 }
