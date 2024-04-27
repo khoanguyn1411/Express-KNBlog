@@ -7,6 +7,7 @@
     "preview": "node dist/index.js",
     "migrate": "migrate-mongo",
     "migrate:init": "migrate-mongo init",
+    "migrate:create": "migrate-mongo create",
     "migrate:apply": "migrate-mongo up",
     "migrate:rollback": "migrate-mongo down",
     "start:mongod": "sudo systemctl start mongod",
