@@ -1,6 +1,6 @@
 // In this file you can configure migrate-
 const dotenv = require("dotenv");
-dotenv.config()
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
