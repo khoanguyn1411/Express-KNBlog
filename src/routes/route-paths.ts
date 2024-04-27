@@ -41,10 +41,17 @@ const blogRoutePaths = buildRoutePaths({
   blogDetail: { path: `blogs/:${BLOG_ID_PARAM_NAME}` },
 } as const);
 
+const uploadRoutePath = buildRoutePaths({
+  upload: {
+    path: "upload",
+  },
+} as const);
+
 /** Route paths can be used throughout the project. */
 export const routePaths = {
   ...baseRoutePaths,
   ...authRoutePaths,
   ...userRoutePaths,
   ...blogRoutePaths,
+  ...uploadRoutePath,
 };
