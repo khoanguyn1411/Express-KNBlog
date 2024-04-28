@@ -33,7 +33,7 @@ class GoogleDriveService {
    * @param mimetype Mime type.
    * @returns
    */
-  public async uploadFile(fileToUpload: any, fileName?: string, mimetype = "text/plain") {
+  public async uploadFile(fileToUpload: any, fileName?: string, mimetype = "image/jpg") {
     const drive = await this.initDrive();
     const fileMetaData = {
       name: fileName ?? randomUUID(),
