@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { drive_v3, google } from "googleapis";
 import { PassThrough } from "stream";
 
@@ -8,6 +9,7 @@ import {
 } from "@/configs/google/google.config";
 import { FileUploadResult } from "@/core/models/file-upload-result";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
+import { mapMimeTypeToExtension, MimeType } from "@/utils/funcs/validate-file-type";
 
 const SCOPES: string[] = [
   "https://www.googleapis.com/auth/drive",
@@ -72,7 +74,7 @@ class GoogleDriveService {
     try {
       const res = drive.files.create({
         requestBody: {
-          name: fileToUpload.originalname,
+          name: `${randomUUID()}.${mapMimeTypeToExtension(fileToUpload.mimetype as MimeType)}`,
           parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
         },
         media: {
@@ -87,7 +89,7 @@ class GoogleDriveService {
       return {
         downloadUrl: result.data.webContentLink as string,
         driveViewUrl: result.data.webViewLink as string,
-        viewUrl: `http://drive.google.com/uc?export=view&id=${fileId}`,
+        viewUrl: `https://drive.google.com/uc?export=view&id=${fileId}`,
       };
     } catch (e) {
       console.error(e);

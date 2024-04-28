@@ -44,6 +44,11 @@ const blogRoutePaths = buildRoutePaths({
 const uploadRoutePath = buildRoutePaths({
   upload: {
     path: "upload",
+    children: {
+      image: {
+        path: "image",
+      },
+    },
   },
 } as const);
 
