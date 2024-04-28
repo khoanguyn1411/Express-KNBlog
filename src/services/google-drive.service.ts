@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import { google } from "googleapis";
+import { PassThrough } from "stream";
 
 import {
   GOOGLE_DRIVE_STORAGE_LOCATION_ID,
@@ -33,20 +34,20 @@ class GoogleDriveService {
    * @param mimetype Mime type.
    * @returns
    */
-  public async uploadFile(fileToUpload: any, fileName?: string, mimetype = "image/jpg") {
+  public async uploadFile(fileToUpload: Express.Multer.File) {
     const drive = await this.initDrive();
-    const fileMetaData = {
-      name: fileName ?? randomUUID(),
-      parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
-    };
+    const bufferStream = new PassThrough();
+    bufferStream.end(fileToUpload.buffer);
+
     try {
       const res = drive.files.create({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        resource: fileMetaData,
+        requestBody: {
+          name: `${fileToUpload.originalname}-${randomUUID()}`,
+          parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
+        },
         media: {
-          body: fileToUpload,
-          mimeType: mimetype,
+          body: bufferStream,
+          mimeType: fileToUpload.mimetype,
         },
         fields: "id",
       });

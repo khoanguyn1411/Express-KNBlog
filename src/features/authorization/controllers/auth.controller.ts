@@ -10,7 +10,7 @@ import { IUser, User } from "@/core/models/user";
 import { googleOauthService } from "@/services/google-oauth.service";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { ResponseErrorType } from "@/utils/funcs/generate-error";
-import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
+import { sendUnauthorizedError } from "@/utils/funcs/send-unauthorized-error";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace AuthController {
@@ -21,7 +21,7 @@ export namespace AuthController {
     const { accessToken, tokenId } = loginMapper.fromDto(req.body);
     const userInfoDto = await googleOauthService.getUserInfoFromOauthTokenId(tokenId, accessToken);
     if (userInfoDto == null) {
-      generateUnauthorizedError(res);
+      sendUnauthorizedError(res);
       return;
     }
     const newUser = userMapper.fromCreationDto(userInfoDto);

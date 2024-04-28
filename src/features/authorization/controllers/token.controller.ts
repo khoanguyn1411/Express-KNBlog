@@ -6,7 +6,7 @@ import { tokenMapper } from "@/core/mapper/token.mapper";
 import { IRefreshToken, IToken } from "@/core/models/token";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { ResponseErrorType } from "@/utils/funcs/generate-error";
-import { generateUnauthorizedError } from "@/utils/funcs/generate-unauthorized-error";
+import { sendUnauthorizedError } from "@/utils/funcs/send-unauthorized-error";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace TokenController {
@@ -17,7 +17,7 @@ export namespace TokenController {
     const { refreshToken } = tokenMapper.fromRefreshTokenDto(req.body);
     const newToken = await tokenHandlerService.resignNewTokenOnRefresh(refreshToken);
     if (newToken == null) {
-      generateUnauthorizedError(res);
+      sendUnauthorizedError(res);
       return;
     }
     res.status(SuccessCode.OK).send(newToken);

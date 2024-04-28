@@ -6,6 +6,10 @@ import { ErrorCode, READABLE_ERROR_CODE } from "../../configs/app/code.config";
 import { Nullable } from "../types/nullable";
 import { StrictOmit } from "../types/strict-omit";
 
+type Stringify<T> = {
+  [K in keyof T]: string;
+};
+
 export type ResponseErrorType<T extends RecordObject = RecordObject> = {
   readonly data?: InputError<T>["data"] & Pick<InputError<T>, "nonFieldError">;
   readonly detail: string;
@@ -16,7 +20,7 @@ export type ErrorData<TError extends RecordObject> = TError extends Document
   : Nullable<TError>;
 
 type InputError<TError extends RecordObject> = {
-  readonly data?: ErrorData<TError>;
+  readonly data?: ErrorData<Stringify<TError>>;
   readonly nonFieldError?: string;
 };
 
