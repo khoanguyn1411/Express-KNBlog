@@ -6,7 +6,7 @@ import { AppRequest } from "../types/request";
 import { assertNonNull } from "./assert-non-null";
 import { generateErrorWithCode } from "./generate-error";
 
-const mimeTypes = [
+export const mimeTypes = [
   "text/plain",
   "text/html",
   "text/css",

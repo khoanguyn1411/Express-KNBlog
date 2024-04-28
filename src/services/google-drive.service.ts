@@ -9,7 +9,7 @@ import {
 } from "@/configs/google/google.config";
 import { FileUploadResult } from "@/core/models/file-upload-result";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
-import { mapMimeTypeToExtension, MimeType } from "@/utils/funcs/validate-file-type";
+import { mapMimeTypeToExtension, MimeType, mimeTypes } from "@/utils/funcs/validate-file-type";
 
 const SCOPES: string[] = ["https://www.googleapis.com/auth/drive"];
 
@@ -60,10 +60,14 @@ class GoogleDriveService {
   public async removeAllFiles() {
     const drive = await this.drivePromise;
     const res = await drive.files.list();
-    res.data.files?.forEach((item) => {
-      assertNonNull(item.id);
-      drive.files.delete({ fileId: item.id });
-    });
+    assertNonNull(res.data.files);
+    const deleteRequests = res.data.files
+      .filter((item) => mimeTypes.includes(item.mimeType as MimeType))
+      .map((item) => {
+        assertNonNull(item.id);
+        return drive.files.delete({ fileId: item.id });
+      });
+    await Promise.all(deleteRequests);
     const newList = await drive.files.list();
     return newList.data;
   }
@@ -80,7 +84,7 @@ class GoogleDriveService {
     const bufferStream = new PassThrough();
     bufferStream.end(fileToUpload.buffer);
     try {
-      const res = drive.files.create({
+      const res = await drive.files.create({
         requestBody: {
           name: `${randomUUID()}.${mapMimeTypeToExtension(fileToUpload.mimetype as MimeType)}`,
           parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
@@ -91,7 +95,7 @@ class GoogleDriveService {
         },
         fields: "id",
       });
-      const fileId = (await res).data.id;
+      const fileId = res.data.id;
       assertNonNull(fileId);
       const result = await this.generatePublicUrl(fileId);
       return {
