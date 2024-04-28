@@ -56,6 +56,18 @@ class GoogleDriveService {
     }
   }
 
+  /** Remove all files, from the trash also. */
+  public async removeAllFiles() {
+    const drive = await this.drivePromise;
+    const res = await drive.files.list();
+    res.data.files?.forEach((item) => {
+      assertNonNull(item.id);
+      drive.files.delete({ fileId: item.id });
+    });
+    const newList = await drive.files.list();
+    return newList.data;
+  }
+
   /**
    * Upload file to google drive folders.
    * @param fileToUpload File.
@@ -67,7 +79,6 @@ class GoogleDriveService {
     const drive = await this.drivePromise;
     const bufferStream = new PassThrough();
     bufferStream.end(fileToUpload.buffer);
-
     try {
       const res = drive.files.create({
         requestBody: {
