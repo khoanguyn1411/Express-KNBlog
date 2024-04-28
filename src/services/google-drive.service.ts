@@ -6,6 +6,7 @@ import {
   GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
 } from "@/configs/google/google.config";
+import { FileUploadResult } from "@/core/models/file-upload-result";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
 
 const SCOPES: string[] = [
@@ -63,7 +64,7 @@ class GoogleDriveService {
    * @param mimetype Mime type.
    * @returns
    */
-  public async uploadFile(fileToUpload: Express.Multer.File) {
+  public async uploadFile(fileToUpload: Express.Multer.File): Promise<FileUploadResult> {
     const drive = await this.drivePromise;
     const bufferStream = new PassThrough();
     bufferStream.end(fileToUpload.buffer);
@@ -82,7 +83,12 @@ class GoogleDriveService {
       });
       const fileId = (await res).data.id;
       assertNonNull(fileId);
-      return this.generatePublicUrl(fileId);
+      const result = await this.generatePublicUrl(fileId);
+      return {
+        downloadUrl: result.data.webContentLink as string,
+        driveViewUrl: result.data.webViewLink as string,
+        viewUrl: `http://drive.google.com/uc?export=view&id=${fileId}`,
+      };
     } catch (e) {
       console.error(e);
       throw e;
