@@ -1,5 +1,4 @@
-import { randomUUID } from "crypto";
-import { google } from "googleapis";
+import { drive_v3, google } from "googleapis";
 import { PassThrough } from "stream";
 
 import {
@@ -7,10 +6,19 @@ import {
   GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
 } from "@/configs/google/google.config";
+import { assertNonNull } from "@/utils/funcs/assert-non-null";
 
-const SCOPES: string[] = ["https://www.googleapis.com/auth/drive"];
+const SCOPES: string[] = [
+  "https://www.googleapis.com/auth/drive",
+  "https://www.googleapis.com/auth/drive.file",
+];
 
 class GoogleDriveService {
+  private drivePromise: Promise<drive_v3.Drive>;
+  constructor() {
+    this.drivePromise = this.initDrive();
+  }
+
   private async authorize() {
     const jwtClient = new google.auth.JWT(
       GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
@@ -27,6 +35,27 @@ class GoogleDriveService {
     return google.drive({ version: "v3", auth: authClient });
   }
 
+  private async generatePublicUrl(fileId: string) {
+    const drive = await this.drivePromise;
+    try {
+      await drive.permissions.create({
+        fileId: fileId,
+        requestBody: {
+          role: "reader",
+          type: "anyone",
+        },
+      });
+      const result = await drive.files.get({
+        fileId: fileId,
+        fields: "webViewLink, webContentLink",
+      });
+      return result;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
   /**
    * Upload file to google drive folders.
    * @param fileToUpload File.
@@ -35,14 +64,14 @@ class GoogleDriveService {
    * @returns
    */
   public async uploadFile(fileToUpload: Express.Multer.File) {
-    const drive = await this.initDrive();
+    const drive = await this.drivePromise;
     const bufferStream = new PassThrough();
     bufferStream.end(fileToUpload.buffer);
 
     try {
       const res = drive.files.create({
         requestBody: {
-          name: `${fileToUpload.originalname}-${randomUUID()}`,
+          name: fileToUpload.originalname,
           parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
         },
         media: {
@@ -51,7 +80,9 @@ class GoogleDriveService {
         },
         fields: "id",
       });
-      return res;
+      const fileId = (await res).data.id;
+      assertNonNull(fileId);
+      return this.generatePublicUrl(fileId);
     } catch (e) {
       console.error(e);
       throw e;
