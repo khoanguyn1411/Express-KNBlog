@@ -11,10 +11,7 @@ import { FileUploadResult } from "@/core/models/file-upload-result";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
 import { mapMimeTypeToExtension, MimeType } from "@/utils/funcs/validate-file-type";
 
-const SCOPES: string[] = [
-  "https://www.googleapis.com/auth/drive",
-  "https://www.googleapis.com/auth/drive.file",
-];
+const SCOPES: string[] = ["https://www.googleapis.com/auth/drive"];
 
 class GoogleDriveService {
   private drivePromise: Promise<drive_v3.Drive>;

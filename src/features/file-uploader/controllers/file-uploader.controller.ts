@@ -13,7 +13,7 @@ export namespace FileUploaderController {
       const result = await googleDriveService.uploadFile(file);
       res.status(SuccessCode.OK).send(result);
     } catch (e) {
-      res.sendStatus(ErrorCode.BadData).send(e);
+      res.status(ErrorCode.BadData).send(e);
     }
   }
 }
