@@ -11,6 +11,8 @@ export const GOOGLE_SERVICE_ACCOUNT_PROJECT_ID = process.env
   .GOOGLE_SERVICE_ACCOUNT_PROJECT_ID as string;
 export const GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID = process.env
   .GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID as string;
+
+// Since the .env file do not recognize \n, we must manually adjust it.
 export const GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY = (
   process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY as string
 )
