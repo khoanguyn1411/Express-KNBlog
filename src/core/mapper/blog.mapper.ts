@@ -8,6 +8,7 @@ class BlogMapper {
       title: data.title,
       description: data.description,
       summary: data.summary,
+      bannerUrl: data.bannerUrl,
     };
   }
 

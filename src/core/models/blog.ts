@@ -10,9 +10,10 @@ export interface IBlog extends MongooseBase {
   readonly title: string;
   readonly description: string;
   readonly summary: string;
+  readonly bannerUrl: string;
 }
 
-export type IBlogCreation = Pick<IBlog, "title" | "summary" | "description">;
+export type IBlogCreation = Pick<IBlog, "title" | "summary" | "description" | "bannerUrl">;
 
 export interface BlogQuery extends PaginationBase {
   readonly search: string;
@@ -28,6 +29,9 @@ const schema = new Schema<IBlog>(
     title: {
       type: String,
       required: true,
+    },
+    bannerUrl: {
+      type: String,
     },
     description: {
       type: String,
