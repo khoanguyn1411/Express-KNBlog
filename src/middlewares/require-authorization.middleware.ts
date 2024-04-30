@@ -1,5 +1,6 @@
 import { NextFunction, Response } from "express";
 
+import { OutdateToken } from "@/core/models/outdate-token";
 import { routePaths } from "@/routes/route-paths";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { sendUnauthorizedError } from "@/utils/funcs/send-unauthorized-error";
@@ -26,6 +27,13 @@ export async function requireAuthorizationMiddleware(
   }
   const user = await tokenHandlerService.decodeAccessTokenFromHeader(req);
   if (user == null) {
+    sendUnauthorizedError(res);
+    return;
+  }
+  const accessToken = tokenHandlerService.getAccessTokenFromHeader(req);
+  const outdateTokenRecord = await OutdateToken.Model.findOne({ user: user._id, accessToken });
+  const isOutdateToken = outdateTokenRecord != null;
+  if (isOutdateToken) {
     sendUnauthorizedError(res);
     return;
   }

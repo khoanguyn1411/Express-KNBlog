@@ -5,8 +5,8 @@ import { IMapperFromDto } from "./mapper";
 class LoginMapper implements IMapperFromDto<LoginDto, ILogin> {
   fromDto(data: LoginDto): ILogin {
     return {
-      tokenId: data.tokenId,
-      accessToken: data.accessToken,
+      googleTokenId: data.tokenId,
+      googleAccessToken: data.accessToken,
     };
   }
 }

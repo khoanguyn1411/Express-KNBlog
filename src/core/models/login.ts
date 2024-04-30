@@ -1,4 +1,4 @@
 export interface ILogin {
-  readonly tokenId: string;
-  readonly accessToken: string;
+  readonly googleTokenId: string;
+  readonly googleAccessToken: string;
 }

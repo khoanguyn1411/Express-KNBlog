@@ -11,35 +11,37 @@ import { IToken } from "@/core/models/token";
 import { IUser, User } from "@/core/models/user";
 import { AppRequest } from "@/utils/types/request";
 
+type UserWithOnlyId = Pick<IUser, "_id">;
+
 export class TokenHandlerService {
   /**
    * Signs a new access and refresh token for the given user.
-   * @param user The user for whom the tokens are being signed.
+   * @param userId The userId for whom the tokens are being signed.
    * @param currentRefreshToken The current refresh token, if available.
    */
-  public signToken(user: IUser, currentRefreshToken?: string): IToken {
+  public signToken(userId: UserWithOnlyId, currentRefreshToken?: string): IToken {
     return {
-      accessToken: this.signAccessToken(user),
-      refreshToken: currentRefreshToken ?? this.signRefreshToken(user),
+      accessToken: this.signAccessToken(userId),
+      refreshToken: currentRefreshToken ?? this.signRefreshToken(userId),
     };
   }
 
   /**
-   * Signs a new access token for the given user.
-   * @param user The user for whom the token is being signed.
+   * Signs a new access token for the given userId.
+   * @param userId The userId for whom the token is being signed.
    */
-  private signAccessToken(user: IUser): string {
-    return jwt.sign(user, JWT_ACCESS_TOKEN, {
+  private signAccessToken(userId: UserWithOnlyId): string {
+    return jwt.sign(userId, JWT_ACCESS_TOKEN, {
       expiresIn: JWT_ACCESS_TOKEN_TIME,
     });
   }
 
   /**
-   * Signs a new refresh token for the given user.
-   * @param user The user for whom the token is being signed.
+   * Signs a new refresh token for the given userId.
+   * @param userId The userId for whom the token is being signed.
    */
-  private signRefreshToken(user: IUser): string {
-    return jwt.sign({ _id: user._id }, JWT_REFRESH_TOKEN, {
+  private signRefreshToken(userId: UserWithOnlyId): string {
+    return jwt.sign(userId, JWT_REFRESH_TOKEN, {
       expiresIn: JWT_ACCESS_REFRESH_TIME,
     });
   }
@@ -54,7 +56,7 @@ export class TokenHandlerService {
       if (userIdDecoded == null) {
         return null;
       }
-      return (userIdDecoded as Pick<IUser, "_id">)._id.toString();
+      return userIdDecoded.toString();
     } catch (e) {
       console.error(e);
       return null;
@@ -71,7 +73,17 @@ export class TokenHandlerService {
       return null;
     }
     const user = await User.Model.findById(userId);
-    return user == null ? null : this.signToken(user.toObject<IUser>(), refreshToken);
+    return user == null ? null : this.signToken({ _id: user.id }, refreshToken);
+  }
+
+  /**
+   * Get access token from header.
+   * @param req Request.
+   */
+  public getAccessTokenFromHeader(req: Request | AppRequest): null | string {
+    const authorization = req.headers.authorization;
+    const accessToken = authorization ? authorization.split(" ")[1] : null;
+    return accessToken;
   }
 
   /**
@@ -79,18 +91,17 @@ export class TokenHandlerService {
    * @param req The Express request object containing the access token.
    */
   public async decodeAccessTokenFromHeader(req: Request | AppRequest): Promise<IUser | null> {
-    const authorization = req.headers.authorization;
-    const accessToken = authorization ? authorization.split(" ")[1] : null;
+    const accessToken = this.getAccessTokenFromHeader(req);
     if (accessToken == null) {
       return null;
     }
     try {
-      const userDecoded = jwt.decode(accessToken);
-      const userDecodedCasted = userDecoded as IUser;
-      if (userDecoded == null || userDecodedCasted._id == null) {
+      const userDecodedId = jwt.decode(accessToken);
+      const userDecodedIdCasted = userDecodedId as UserWithOnlyId;
+      if (userDecodedId == null || userDecodedIdCasted == null) {
         return null;
       }
-      const user = await User.Model.findById(userDecodedCasted._id);
+      const user = await User.Model.findById(userDecodedIdCasted._id);
       return user;
     } catch (e) {
       return null;
