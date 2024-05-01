@@ -13,7 +13,8 @@ export enum UserRole {
 
 export interface IUser extends MongooseBase {
   readonly email: string;
-  readonly name: string;
+  readonly firstName: string;
+  readonly lastName: string;
   readonly lastLogin: Date;
   readonly role: UserRole;
 }
@@ -26,7 +27,11 @@ const schema = new Schema<IUser>(
       type: String,
       required: true,
     },
-    name: {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },

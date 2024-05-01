@@ -27,11 +27,8 @@ export namespace AuthController {
     req: AppRequest<LoginDto>,
     res: Response<IToken | ResponseErrorType<ILogin>>,
   ): Promise<void> {
-    const { googleAccessToken, googleTokenId } = loginMapper.fromDto(req.body);
-    const userInfoDto = await googleOauthService.getUserInfoFromOauthTokenId(
-      googleTokenId,
-      googleAccessToken,
-    );
+    const loginDtoData = loginMapper.fromDto(req.body);
+    const userInfoDto = await googleOauthService.verifyTokenId(loginDtoData);
     if (userInfoDto == null) {
       sendUnauthorizedError(res);
       return;

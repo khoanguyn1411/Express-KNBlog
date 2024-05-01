@@ -1,11 +1,12 @@
-import { UserCreationDto } from "../dtos/user.dto";
+import { LoginDto } from "../dtos/login.dto";
 import { IUserCreation, UserRole } from "../models/user";
 
 class UserMapper {
-  fromCreationDto(data: UserCreationDto): IUserCreation {
+  fromCreationDto(data: LoginDto): IUserCreation {
     return {
       email: data.email,
-      name: data.name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       lastLogin: new Date(),
       role: UserRole.Viewer,
     };
