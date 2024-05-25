@@ -22,6 +22,15 @@ import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate
 import { sendUnauthorizedError } from "@/utils/funcs/send-unauthorized-error";
 import { AppRequest } from "@/utils/types/request";
 
+function sendUnableLoginError(res: Response) {
+  const errorCode = ErrorCode.Unauthorized;
+  res.status(errorCode).send(
+    generateErrorWithCode<LoginDataDto>(errorCode, {
+      nonFieldError: "Unable to login with your credential.",
+    }),
+  );
+}
+
 export namespace AuthController {
   export async function logout(req: AppRequest<GoogleLoginDataDto>, res: Response): Promise<void> {
     const accessToken = tokenHandlerService.getAccessTokenFromHeader(req);
@@ -59,16 +68,17 @@ export namespace AuthController {
   ): Promise<void> {
     const loginData = loginDataMapper.fromDto(req.body);
     const currentUser = await User.Model.findOne({ email: loginData.email });
+
     if (currentUser == null || currentUser.password == null) {
-      sendUnauthorizedError(res);
+      sendUnableLoginError(res);
       return;
     }
-    const isPasswordCorrect = passwordService.verifyPassword(
+    const isPasswordCorrect = await passwordService.verifyPassword(
       loginData.password,
       currentUser.password,
     );
     if (!isPasswordCorrect) {
-      sendUnauthorizedError(res);
+      sendUnableLoginError(res);
       return;
     }
     const token = tokenHandlerService.signToken({ _id: currentUser._id });
@@ -84,7 +94,7 @@ export namespace AuthController {
     const isEmailExists = (await User.Model.findOne({ email: userCreation.email })) != null;
     if (isEmailExists) {
       const error = generateErrorWithCode<IRegisterData>(ErrorCode.BadData, {
-        data: { email: "Email already exist." },
+        data: { email: "Email already existed." },
       });
       res.status(ErrorCode.BadData).send(error);
       return;
