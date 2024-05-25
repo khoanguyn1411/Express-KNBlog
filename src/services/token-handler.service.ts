@@ -50,13 +50,13 @@ export class TokenHandlerService {
    * Decodes the user ID from a JWT token.
    * @param token The JWT token to decode.
    */
-  private getUserIdDecoded(token: string): string | null {
+  private getUserIdDecoded(token: string): UserWithOnlyId | null {
     try {
       const userIdDecoded = jwt.decode(token);
       if (userIdDecoded == null) {
         return null;
       }
-      return userIdDecoded.toString();
+      return userIdDecoded as UserWithOnlyId;
     } catch (e) {
       console.error(e);
       return null;
@@ -68,11 +68,11 @@ export class TokenHandlerService {
    * @param refreshToken The refresh token used to obtain a new token pair.
    */
   public async resignNewTokenOnRefresh(refreshToken: string): Promise<IToken | null> {
-    const userId = this.getUserIdDecoded(refreshToken);
-    if (userId == null) {
+    const userWithOnlyId = this.getUserIdDecoded(refreshToken);
+    if (userWithOnlyId == null) {
       return null;
     }
-    const user = await User.Model.findById(userId);
+    const user = await User.Model.findById(userWithOnlyId._id);
     return user == null ? null : this.signToken({ _id: user.id }, refreshToken);
   }
 
