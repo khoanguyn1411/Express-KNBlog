@@ -50,13 +50,13 @@ export class TokenHandlerService {
    * Decodes the user ID from a JWT token.
    * @param token The JWT token to decode.
    */
-  private getUserIdDecoded(token: string): UserWithOnlyId | null {
+  private async getUserFromToken(token: string): Promise<MUser | null> {
     try {
-      const userIdDecoded = jwt.decode(token);
+      const userIdDecoded = jwt.decode(token) as UserWithOnlyId | null;
       if (userIdDecoded == null) {
         return null;
       }
-      return userIdDecoded as UserWithOnlyId;
+      return userIdDecoded == null ? null : await UserDB.Model.findById(userIdDecoded._id);
     } catch (e) {
       console.error(e);
       return null;
@@ -68,12 +68,8 @@ export class TokenHandlerService {
    * @param refreshToken The refresh token used to obtain a new token pair.
    */
   public async resignNewTokenOnRefresh(refreshToken: string): Promise<Token | null> {
-    const userWithOnlyId = this.getUserIdDecoded(refreshToken);
-    if (userWithOnlyId == null) {
-      return null;
-    }
-    const user = await UserDB.Model.findById(userWithOnlyId._id);
-    return user == null ? null : this.signToken({ _id: user.id }, refreshToken);
+    const user = await this.getUserFromToken(refreshToken);
+    return user == null ? null : this.signToken({ _id: user._id }, refreshToken);
   }
 
   /**
@@ -92,20 +88,7 @@ export class TokenHandlerService {
    */
   public async getUserFromHeaderToken(req: Request | AppRequest): Promise<MUser | null> {
     const accessToken = this.getAccessTokenFromHeader(req);
-    if (accessToken == null) {
-      return null;
-    }
-    try {
-      const userDecodedId = jwt.decode(accessToken);
-      const userDecodedIdCasted = userDecodedId as UserWithOnlyId;
-      if (userDecodedId == null || userDecodedIdCasted == null) {
-        return null;
-      }
-      const user = await UserDB.Model.findById(userDecodedIdCasted._id);
-      return user;
-    } catch (e) {
-      return null;
-    }
+    return accessToken == null ? null : await this.getUserFromToken(accessToken);
   }
 }
 
