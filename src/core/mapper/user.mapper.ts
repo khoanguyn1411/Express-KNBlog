@@ -10,7 +10,6 @@ class UserMapper {
       lastName: data.lastName,
       lastLogin: new Date(),
       password: null,
-      googleTokenId: data.googleTokenId,
       role: UserRole.Viewer,
     };
   }
@@ -22,7 +21,6 @@ class UserMapper {
       lastName: data.lastName,
       lastLogin: new Date(),
       password: data.password,
-      googleTokenId: null,
       role: UserRole.Viewer,
     };
   }
