@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export interface LoginDto {
+export interface GoogleLoginDataDto {
   readonly googleTokenId: string;
   readonly pictureUrl: string | null;
   readonly firstName: string;
@@ -8,7 +8,7 @@ export interface LoginDto {
   readonly email: string;
 }
 
-export const loginDtoSchema = Joi.object<LoginDto>({
+export const GoogleLoginDataDtoSchema = Joi.object<GoogleLoginDataDto>({
   googleTokenId: Joi.string().required(),
   pictureUrl: Joi.string().allow(null),
   firstName: Joi.string().required(),

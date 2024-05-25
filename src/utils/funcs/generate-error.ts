@@ -20,7 +20,7 @@ export type ErrorData<TError extends RecordObject> = TError extends Document
   : Nullable<TError>;
 
 type InputError<TError extends RecordObject> = {
-  readonly data?: ErrorData<Stringify<TError>>;
+  readonly data?: Partial<ErrorData<Stringify<TError>>>;
   readonly nonFieldError?: string;
 };
 

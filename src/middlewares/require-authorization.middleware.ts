@@ -8,6 +8,8 @@ import { AppRequest } from "@/utils/types/request";
 
 const NON_AUTHORIZED_ROUTES = [
   routePaths.auth.children.login.url,
+  routePaths.auth.children.register.url,
+  routePaths.auth.children.googleLogin.url,
   routePaths.auth.children.token.children.refresh.url,
   routePaths.blogs.url,
 ];

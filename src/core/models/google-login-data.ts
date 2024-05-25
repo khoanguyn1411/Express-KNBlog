@@ -1,4 +1,4 @@
-export interface ILogin {
+export interface IGoogleLoginData {
   readonly googleTokenId: string;
   readonly pictureUrl: string | null;
   readonly firstName: string;

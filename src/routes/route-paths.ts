@@ -13,6 +13,8 @@ const authRoutePaths = buildRoutePaths({
     path: "auth",
     children: {
       login: { path: "login" },
+      register: { path: "register" },
+      googleLogin: { path: "google-login" },
       logout: { path: "logout" },
       token: {
         path: "token",

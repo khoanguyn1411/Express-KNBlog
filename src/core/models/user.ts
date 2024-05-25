@@ -15,7 +15,9 @@ export interface IUser extends MongooseBase {
   readonly email: string;
   readonly firstName: string;
   readonly lastName: string;
+  readonly password: string | null;
   readonly lastLogin: Date;
+  readonly googleTokenId: string | null;
   readonly role: UserRole;
 }
 
@@ -38,6 +40,14 @@ const schema = new Schema<IUser>(
     lastLogin: {
       type: Date,
       required: true,
+    },
+    password: {
+      type: String,
+      default: null,
+    },
+    googleTokenId: {
+      type: String,
+      default: null,
     },
     role: {
       type: String,
