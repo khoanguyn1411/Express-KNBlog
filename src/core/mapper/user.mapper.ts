@@ -1,9 +1,10 @@
+import { MUser, UserRole } from "../db-models/user.db";
 import { GoogleLoginDataDto } from "../dtos/google-login-data.dto";
 import { RegisterDataDto } from "../dtos/register-data.dto";
-import { IUserCreation, UserRole } from "../models/user";
+import { User, UserCreation } from "../models/user";
 
 class UserMapper {
-  fromGoogleData(data: GoogleLoginDataDto): IUserCreation {
+  fromGoogleData(data: GoogleLoginDataDto): UserCreation {
     return {
       email: data.email,
       firstName: data.firstName,
@@ -14,7 +15,7 @@ class UserMapper {
     };
   }
 
-  fromRegisterData(data: RegisterDataDto): IUserCreation {
+  fromRegisterData(data: RegisterDataDto): UserCreation {
     return {
       email: data.email,
       firstName: data.firstName,
@@ -22,6 +23,17 @@ class UserMapper {
       lastLogin: new Date(),
       password: data.password,
       role: UserRole.Viewer,
+    };
+  }
+
+  fromMUser(data: MUser): User {
+    return {
+      _id: data._id,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      lastLogin: data.lastLogin,
+      role: data.role,
     };
   }
 }

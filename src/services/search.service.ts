@@ -5,11 +5,11 @@ class SearchService {
  * Built config for full text search feature of mongoose.
  * @param searchQuery Search query.
  * @example
- * const schema = new Schema<IBlog>(
+ * const schema = new Schema<MBlog>(
   {
     writtenBy: {
       type: ObjectId,
-      ref: User.ModelName,
+      ref: UserDB.ModelName,
       required: true,
     },
     title: {

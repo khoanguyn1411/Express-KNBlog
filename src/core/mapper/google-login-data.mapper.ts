@@ -1,9 +1,9 @@
 import { GoogleLoginDataDto } from "../dtos/google-login-data.dto";
-import { IGoogleLoginData } from "../models/google-login-data";
+import { GoogleLoginData } from "../models/google-login-data";
 import { IMapperFromDto } from "./mapper";
 
-class GoogleLoginDataMapper implements IMapperFromDto<GoogleLoginDataDto, IGoogleLoginData> {
-  fromDto(data: GoogleLoginDataDto): IGoogleLoginData {
+class GoogleLoginDataMapper implements IMapperFromDto<GoogleLoginDataDto, GoogleLoginData> {
+  fromDto(data: GoogleLoginDataDto): GoogleLoginData {
     return {
       googleTokenId: data.googleTokenId,
       email: data.email,

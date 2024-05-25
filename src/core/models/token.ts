@@ -1,6 +1,6 @@
-export interface IToken {
+export interface Token {
   readonly accessToken: string;
   readonly refreshToken: string;
 }
 
-export type IRefreshToken = Pick<IToken, "refreshToken">;
+export type RefreshToken = Pick<Token, "refreshToken">;

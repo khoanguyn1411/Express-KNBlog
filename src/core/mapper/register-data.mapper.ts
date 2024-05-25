@@ -1,9 +1,9 @@
 import { RegisterDataDto } from "../dtos/register-data.dto";
-import { IRegisterData } from "../models/register-data";
+import { RegisterData } from "../models/register-data";
 import { IMapperFromDto } from "./mapper";
 
-class RegisterDataMapper implements IMapperFromDto<RegisterDataDto, IRegisterData> {
-  fromDto(data: RegisterDataDto): IRegisterData {
+class RegisterDataMapper implements IMapperFromDto<RegisterDataDto, RegisterData> {
+  fromDto(data: RegisterDataDto): RegisterData {
     return {
       email: data.email,
       password: data.password,

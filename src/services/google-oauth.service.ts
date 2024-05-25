@@ -1,13 +1,13 @@
 import { OAuth2Client } from "google-auth-library";
 
 import { GOOGLE_CLIENT_ID } from "@/configs/google/google.config";
-import { IGoogleLoginData } from "@/core/models/google-login-data";
+import { GoogleLoginData } from "@/core/models/google-login-data";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
 
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 class GoogleOauthService {
-  public async verifyTokenId(loginInfo: IGoogleLoginData): Promise<IGoogleLoginData | null> {
+  public async verifyTokenId(loginInfo: GoogleLoginData): Promise<GoogleLoginData | null> {
     try {
       const ticket = await client.verifyIdToken({
         idToken: loginInfo.googleTokenId,

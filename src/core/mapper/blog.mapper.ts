@@ -1,9 +1,9 @@
 import { BlogCreationDto, BlogQueryDto } from "../dtos/blog.dto";
-import { BlogQuery, IBlogCreation } from "../models/blog";
+import { BlogCreation, BlogQuery } from "../models/blog";
 import { paginationMapper } from "./pagination.mapper";
 
 class BlogMapper {
-  fromCreationDto(data: BlogCreationDto): IBlogCreation {
+  fromCreationDto(data: BlogCreationDto): BlogCreation {
     return {
       title: data.title,
       description: data.description,

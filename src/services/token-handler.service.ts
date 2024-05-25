@@ -7,11 +7,11 @@ import {
   JWT_ACCESS_TOKEN_TIME,
   JWT_REFRESH_TOKEN,
 } from "@/configs/app/app.config";
-import { IToken } from "@/core/models/token";
-import { IUser, User } from "@/core/models/user";
+import { MUser, UserDB } from "@/core/db-models/user.db";
+import { Token } from "@/core/models/token";
 import { AppRequest } from "@/utils/types/request";
 
-type UserWithOnlyId = Pick<IUser, "_id">;
+type UserWithOnlyId = Pick<MUser, "_id">;
 
 export class TokenHandlerService {
   /**
@@ -19,7 +19,7 @@ export class TokenHandlerService {
    * @param userId The userId for whom the tokens are being signed.
    * @param currentRefreshToken The current refresh token, if available.
    */
-  public signToken(userId: UserWithOnlyId, currentRefreshToken?: string): IToken {
+  public signToken(userId: UserWithOnlyId, currentRefreshToken?: string): Token {
     return {
       accessToken: this.signAccessToken(userId),
       refreshToken: currentRefreshToken ?? this.signRefreshToken(userId),
@@ -67,12 +67,12 @@ export class TokenHandlerService {
    * Resigns a new token pair when a refresh token is used.
    * @param refreshToken The refresh token used to obtain a new token pair.
    */
-  public async resignNewTokenOnRefresh(refreshToken: string): Promise<IToken | null> {
+  public async resignNewTokenOnRefresh(refreshToken: string): Promise<Token | null> {
     const userWithOnlyId = this.getUserIdDecoded(refreshToken);
     if (userWithOnlyId == null) {
       return null;
     }
-    const user = await User.Model.findById(userWithOnlyId._id);
+    const user = await UserDB.Model.findById(userWithOnlyId._id);
     return user == null ? null : this.signToken({ _id: user.id }, refreshToken);
   }
 
@@ -90,7 +90,7 @@ export class TokenHandlerService {
    * Decodes and retrieves the user information from the access token in the request header.
    * @param req The Express request object containing the access token.
    */
-  public async decodeAccessTokenFromHeader(req: Request | AppRequest): Promise<IUser | null> {
+  public async getUserFromHeaderToken(req: Request | AppRequest): Promise<MUser | null> {
     const accessToken = this.getAccessTokenFromHeader(req);
     if (accessToken == null) {
       return null;
@@ -101,7 +101,7 @@ export class TokenHandlerService {
       if (userDecodedId == null || userDecodedIdCasted == null) {
         return null;
       }
-      const user = await User.Model.findById(userDecodedIdCasted._id);
+      const user = await UserDB.Model.findById(userDecodedIdCasted._id);
       return user;
     } catch (e) {
       return null;

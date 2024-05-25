@@ -1,4 +1,4 @@
-export interface IRegisterData {
+export interface RegisterData {
   readonly email: string;
   readonly password: string;
   readonly pictureUrl: string | null;

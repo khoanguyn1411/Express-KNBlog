@@ -1,16 +1,16 @@
 import { RefreshTokenDto, TokenDto } from "../dtos/token.dto";
-import { IRefreshToken, IToken } from "../models/token";
+import { RefreshToken, Token } from "../models/token";
 import { IMapperFromDto } from "./mapper";
 
-class TokenMapper implements IMapperFromDto<TokenDto, IToken> {
-  fromDto(data: TokenDto): IToken {
+class TokenMapper implements IMapperFromDto<TokenDto, Token> {
+  fromDto(data: TokenDto): Token {
     return {
       accessToken: data.accessToken,
       refreshToken: data.refreshToken,
     };
   }
 
-  fromRefreshTokenDto(data: RefreshTokenDto): IRefreshToken {
+  fromRefreshTokenDto(data: RefreshTokenDto): RefreshToken {
     return {
       refreshToken: data.refreshToken,
     };
