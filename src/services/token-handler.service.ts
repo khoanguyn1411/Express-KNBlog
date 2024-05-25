@@ -47,7 +47,7 @@ export class TokenHandlerService {
   }
 
   /**
-   * Decodes the user ID from a JWT token.
+   * Get user from a JWT token.
    * @param token The JWT token to decode.
    */
   private async getUserFromToken(token: string): Promise<MUser | null> {
