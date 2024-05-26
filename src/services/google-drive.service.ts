@@ -84,9 +84,10 @@ class GoogleDriveService {
     const bufferStream = new PassThrough();
     bufferStream.end(fileToUpload.buffer);
     try {
+      // Step 1: Create file with temporary name.
       const res = await drive.files.create({
         requestBody: {
-          name: `${randomUUID()}.${mapMimeTypeToExtension(fileToUpload.mimetype as MimeType)}`,
+          name: randomUUID(),
           parents: [GOOGLE_DRIVE_STORAGE_LOCATION_ID],
         },
         media: {
@@ -97,6 +98,16 @@ class GoogleDriveService {
       });
       const fileId = res.data.id;
       assertNonNull(fileId);
+
+      // Step 2: Update the file name with the ID included, will be easier to migrate later.
+      await drive.files.update({
+        fileId: fileId,
+        requestBody: {
+          name: `${fileId}.${mapMimeTypeToExtension(fileToUpload.mimetype as MimeType)}`,
+        },
+        fields: "id, name",
+      });
+
       const result = await this.generatePublicUrl(fileId);
       return {
         downloadUrl: result.data.webContentLink as string,
