@@ -1,12 +1,9 @@
 import { randomUUID } from "crypto";
+import googleConfigJson from "google-service-config.json";
 import { drive_v3, google } from "googleapis";
 import { PassThrough } from "stream";
 
-import {
-  GOOGLE_DRIVE_STORAGE_LOCATION_ID,
-  GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
-  GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
-} from "@/configs/google/google.config";
+import { GOOGLE_DRIVE_STORAGE_LOCATION_ID } from "@/configs/google/google.config";
 import { FileUploadResult } from "@/core/models/file-upload-result";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
 import { mapMimeTypeToExtension, MimeType, mimeTypes } from "@/utils/funcs/validate-file-type";
@@ -21,9 +18,9 @@ class GoogleDriveService {
 
   private async authorize() {
     const jwtClient = new google.auth.JWT(
-      GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+      googleConfigJson.client_email,
       undefined,
-      GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+      googleConfigJson.private_key,
       SCOPES,
     );
     await jwtClient.authorize();

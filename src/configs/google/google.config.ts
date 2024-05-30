@@ -8,26 +8,5 @@ export const GOOGLE_SERVICE_ACCOUNT_PROJECT_ID = process.env
 export const GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID = process.env
   .GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY_ID as string;
 
-// Since the .env file do not recognize \n, we must manually adjust it.
-export const GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY = (
-  process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY as string
-)
-  .split(String.raw`\n`)
-  .join("\n");
-export const GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL = process.env
-  .GOOGLE_SERVICE_ACCOUNT_CLIENT_EMAIL as string;
-export const GOOGLE_SERVICE_ACCOUNT_CLIENT_ID = process.env
-  .GOOGLE_SERVICE_ACCOUNT_CLIENT_ID as string;
-export const GOOGLE_SERVICE_ACCOUNT_AUTH_URI = process.env
-  .GOOGLE_SERVICE_ACCOUNT_AUTH_URI as string;
-export const GOOGLE_SERVICE_ACCOUNT_TOKEN_URI = process.env
-  .GOOGLE_SERVICE_ACCOUNT_TOKEN_URI as string;
-export const GOOGLE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL = process.env
-  .GOOGLE_SERVICE_ACCOUNT_AUTH_PROVIDER_X509_CERT_URL as string;
-export const GOOGLE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL = process.env
-  .GOOGLE_SERVICE_ACCOUNT_CLIENT_X509_CERT_URL as string;
-export const GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN = process.env
-  .GOOGLE_SERVICE_ACCOUNT_UNIVERSE_DOMAIN as string;
-
 export const GOOGLE_DRIVE_STORAGE_LOCATION_ID = process.env
   .GOOGLE_DRIVE_STORAGE_LOCATION_ID as string;
