@@ -11,7 +11,7 @@ type Stringify<T> = {
 };
 
 export type ResponseErrorType<T extends RecordObject = RecordObject> = {
-  readonly data?: InputError<T>["data"] & Pick<InputError<T>, "nonFieldError">;
+  readonly data?: InputError<T>["data"] & Pick<InputError<T>, "nonFieldErrors">;
   readonly detail: string;
 };
 
@@ -21,7 +21,7 @@ export type ErrorData<TError extends RecordObject> = TError extends Document
 
 type InputError<TError extends RecordObject> = {
   readonly data?: Partial<ErrorData<Stringify<TError>>>;
-  readonly nonFieldError?: string;
+  readonly nonFieldErrors?: string;
 };
 
 function generateError<T extends RecordObject>(
@@ -34,7 +34,7 @@ function generateError<T extends RecordObject>(
   if (error.data == null) {
     return {
       data: {
-        nonFieldError: error.nonFieldError,
+        nonFieldErrors: error.nonFieldErrors,
       },
       detail: errorDetail,
     } as ResponseErrorType<T>;
@@ -42,7 +42,7 @@ function generateError<T extends RecordObject>(
   return {
     data: {
       ...error.data,
-      nonFieldError: error.nonFieldError,
+      nonFieldErrors: error.nonFieldErrors,
     },
     detail: errorDetail,
   };

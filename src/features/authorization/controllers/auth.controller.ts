@@ -26,7 +26,7 @@ function sendUnableLoginError(res: Response) {
   const errorCode = ErrorCode.Unauthorized;
   res.status(errorCode).send(
     generateErrorWithCode<LoginDataDto>(errorCode, {
-      nonFieldError: "Unable to login with your credential.",
+      nonFieldErrors: "Unable to login with your credential.",
     }),
   );
 }
