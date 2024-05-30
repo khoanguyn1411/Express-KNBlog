@@ -23,7 +23,7 @@ import { sendUnauthorizedError } from "@/utils/funcs/send-unauthorized-error";
 import { AppRequest } from "@/utils/types/request";
 
 function sendUnableLoginError(res: Response) {
-  const errorCode = ErrorCode.Unauthorized;
+  const errorCode = ErrorCode.BadData;
   res.status(errorCode).send(
     generateErrorWithCode<LoginDataDto>(errorCode, {
       nonFieldErrors: ["Unable to login with your credential."],
