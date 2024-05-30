@@ -21,7 +21,7 @@ export type ErrorData<TError extends RecordObject> = TError extends Document
 
 type InputError<TError extends RecordObject> = {
   readonly data?: Partial<ErrorData<Stringify<TError>>>;
-  readonly nonFieldErrors?: string;
+  readonly nonFieldErrors?: string[] | string;
 };
 
 function generateError<T extends RecordObject>(
