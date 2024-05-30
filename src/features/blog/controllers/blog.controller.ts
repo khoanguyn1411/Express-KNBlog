@@ -48,7 +48,7 @@ export namespace BlogController {
     if (blog == null) {
       res
         .status(ErrorCode.NotFound)
-        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: "Invalid blog ID." }));
+        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: ["Invalid blog ID."] }));
       return;
     }
     res.status(SuccessCode.Accepted).send(blog);

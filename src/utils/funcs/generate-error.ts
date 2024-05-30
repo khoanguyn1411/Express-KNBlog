@@ -7,7 +7,7 @@ import { Nullable } from "../types/nullable";
 import { StrictOmit } from "../types/strict-omit";
 
 type Stringify<T> = {
-  [K in keyof T]: string;
+  [K in keyof T]: string[];
 };
 
 export type ResponseErrorType<T extends RecordObject = RecordObject> = {
@@ -21,7 +21,7 @@ export type ErrorData<TError extends RecordObject> = TError extends Document
 
 type InputError<TError extends RecordObject> = {
   readonly data?: Partial<ErrorData<Stringify<TError>>>;
-  readonly nonFieldErrors?: string[] | string;
+  readonly nonFieldErrors?: string[];
 };
 
 function generateError<T extends RecordObject>(

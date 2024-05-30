@@ -66,7 +66,7 @@ export function validateUploadFileRequestSchema(
     res
       .status(ErrorCode.BadData)
       .send(
-        generateErrorWithCode(ErrorCode.BadData, { data: { file: "This field is required." } }),
+        generateErrorWithCode(ErrorCode.BadData, { data: { file: ["This field is required."] } }),
       );
     return;
   }
@@ -80,7 +80,7 @@ export function validateFileType(mimeTypes: readonly MimeType[]) {
     if (!mimeTypes.includes(req.file.mimetype as MimeType)) {
       res.status(ErrorCode.BadData).send(
         generateErrorWithCode(ErrorCode.BadData, {
-          data: { file: `Invalid file type. Allow: ${validFileTypes}` },
+          data: { file: [`Invalid file type. Allow: ${validFileTypes}`] },
         }),
       );
       return;

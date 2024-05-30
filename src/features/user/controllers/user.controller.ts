@@ -12,7 +12,7 @@ export namespace UserController {
     if (fullUser == null) {
       res.status(ErrorCode.InternalServer).send(
         generateErrorWithCode(ErrorCode.InternalServer, {
-          nonFieldErrors: "Could not find user profile.",
+          nonFieldErrors: ["Could not find user profile."],
         }),
       );
       return;
