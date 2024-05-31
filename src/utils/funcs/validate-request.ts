@@ -17,10 +17,12 @@ enum ValidationErrorCode {
   Max = "string.max",
   Min = "string.min",
   Number = "number.base",
+  InvalidField = "object.unknown",
 }
 
 const VALIDATION_ERROR_MAPPED: Record<ValidationErrorCode, (context: any) => string> = {
   [ValidationErrorCode.Required]: () => "This field is required.",
+  [ValidationErrorCode.InvalidField]: () => "Invalid field.",
   [ValidationErrorCode.Email]: () => "This field must be a valid email.",
   [ValidationErrorCode.Empty]: () => "This field should not be empty.",
   [ValidationErrorCode.String]: () => "This field must be string.",
