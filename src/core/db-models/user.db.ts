@@ -17,6 +17,7 @@ export interface MUser extends MongooseBase {
   readonly password: string | null;
   readonly lastLogin: Date;
   readonly role: UserRole;
+  readonly pictureUrl: string | null;
 }
 
 const schema = new Schema<MUser>(
@@ -38,6 +39,10 @@ const schema = new Schema<MUser>(
       required: true,
     },
     password: {
+      type: String,
+      default: null,
+    },
+    pictureUrl: {
       type: String,
       default: null,
     },

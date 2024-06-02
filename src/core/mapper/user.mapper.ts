@@ -12,6 +12,7 @@ class UserMapper {
       lastLogin: new Date(),
       password: null,
       role: UserRole.Viewer,
+      pictureUrl: data.pictureUrl,
     };
   }
 
@@ -23,6 +24,7 @@ class UserMapper {
       lastLogin: new Date(),
       password: data.password,
       role: UserRole.Viewer,
+      pictureUrl: data.pictureUrl,
     };
   }
 
@@ -34,6 +36,7 @@ class UserMapper {
       lastName: data.lastName,
       lastLogin: data.lastLogin,
       role: data.role,
+      pictureUrl: data.pictureUrl,
     };
   }
 }
