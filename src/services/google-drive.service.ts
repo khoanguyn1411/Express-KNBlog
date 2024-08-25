@@ -110,7 +110,7 @@ class GoogleDriveService {
         downloadUrl: result.data.webContentLink as string,
         driveViewUrl: result.data.webViewLink as string,
 
-        // Replace this URL https://drive.google.com/uc?export=view&id=${fileId} with below URL because the issues:
+        // Temporarily replace this URL https://drive.google.com/uc?export=view&id=${fileId} with below URL because the issues:
         // - https://issuetracker.google.com/issues/319531488?pli=1,
         // - https://stackoverflow.com/questions/77803187/having-trouble-displaying-an-image-from-google-drive
 
