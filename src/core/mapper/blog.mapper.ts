@@ -6,7 +6,7 @@ class BlogMapper {
   fromCreationDto(data: BlogCreationDto): BlogCreation {
     return {
       title: data.title,
-      description: data.description,
+      content: data.content,
       summary: data.summary,
       bannerUrl: data.bannerUrl,
     };

@@ -4,7 +4,7 @@ import { PaginationDto, paginationDtoSchema } from "./pagination.dto";
 
 export interface BlogCreationDto {
   readonly title: string;
-  readonly description: string;
+  readonly content: string;
   readonly summary: string;
   readonly bannerUrl: string;
 }
@@ -19,7 +19,7 @@ export interface BlogQueryDto extends PaginationDto {
 
 export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
   title: Joi.string().required(),
-  description: Joi.string().required(),
+  content: Joi.string().required(),
   summary: Joi.string().optional(),
   bannerUrl: Joi.string().optional(),
 });

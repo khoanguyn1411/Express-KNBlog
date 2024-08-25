@@ -7,7 +7,7 @@ import { MUser, UserDB } from "./user.db";
 export interface MBlog extends MongooseBase {
   readonly writtenBy: MUser;
   readonly title: string;
-  readonly description: string;
+  readonly content: string;
   readonly summary: string;
   readonly bannerUrl: string;
 }
@@ -26,7 +26,7 @@ const schema = new Schema<MBlog>(
     bannerUrl: {
       type: String,
     },
-    description: {
+    content: {
       type: String,
       required: true,
     },
