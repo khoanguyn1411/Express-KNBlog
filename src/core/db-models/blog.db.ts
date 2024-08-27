@@ -42,5 +42,8 @@ const schema = new Schema<MBlog>(
 export namespace BlogDB {
   export const ModelName = "blog";
   export const Model = model(ModelName, schema);
-  export const ShortPopulation: PopulateOptions = { path: "writtenBy", select: "name" };
+  export const ShortPopulation: PopulateOptions = {
+    path: "writtenBy",
+    select: UserDB.SelectFullPopulation,
+  };
 }

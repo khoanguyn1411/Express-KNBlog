@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
 
+import { User } from "../models/user";
 import { MongooseBase } from "./mongoose";
 
 export enum UserRole {
@@ -58,5 +59,14 @@ const schema = new Schema<MUser>(
 
 export namespace UserDB {
   export const ModelName = "user";
+  export const SelectFullPopulation: (keyof User)[] = [
+    "_id",
+    "firstName",
+    "lastName",
+    "email",
+    "pictureUrl",
+    "lastLogin",
+    "role",
+  ];
   export const Model = model(ModelName, schema);
 }
