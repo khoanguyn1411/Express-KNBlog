@@ -20,10 +20,19 @@ export async function mapAndCreatePaginationFor<T extends RecordObject, E, K ext
   const { limit, offset } = paginationMapper.fromDto(paginationConfigDto);
   const count = await schemaCallback().count();
   const results = await schemaCallback().limit(limit).skip(offset);
+
+  // Check if there's a next page
+  const hasNextPage = offset + results.length < count;
+
+  // Check if there's a previous page
+  const hasPrevPage = offset > 0;
+
   return {
     offset,
     limit,
     count,
+    hasNext: hasNextPage,
+    hasPrev: hasPrevPage,
     results,
   };
 }

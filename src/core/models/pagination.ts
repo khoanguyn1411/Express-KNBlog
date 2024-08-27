@@ -7,5 +7,7 @@ export interface PaginationBase {
 
 export interface Pagination<T extends RecordObject> extends NonNullable<PaginationBase> {
   readonly count: number;
+  readonly hasNext: boolean;
+  readonly hasPrev: boolean;
   readonly results: readonly T[];
 }
