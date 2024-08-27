@@ -25,6 +25,7 @@ const schema = new Schema<MBlog>(
     },
     bannerUrl: {
       type: String,
+      default: null,
     },
     content: {
       type: String,
