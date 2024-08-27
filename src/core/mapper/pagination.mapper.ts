@@ -8,10 +8,12 @@ const DEFAULT_PAGINATION_OPTION: PaginationBase = {
 };
 
 class PaginationMapper implements IMapperFromDto<PaginationDto, PaginationBase> {
-  fromDto(data: PaginationDto): PaginationBase {
+  public fromDto(data: PaginationDto): PaginationBase {
+    const offset = Number(data.offset);
+    const limit = Number(data.limit);
     return {
-      offset: Number(data.offset) ?? DEFAULT_PAGINATION_OPTION.offset,
-      limit: Number(data.limit) ?? DEFAULT_PAGINATION_OPTION.limit,
+      offset: Number.isNaN(offset) ? DEFAULT_PAGINATION_OPTION.offset : offset,
+      limit: Number.isNaN(limit) ? DEFAULT_PAGINATION_OPTION.limit : limit,
     };
   }
 }
