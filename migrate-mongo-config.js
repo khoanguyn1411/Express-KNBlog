@@ -4,7 +4,7 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb://localhost:27017/knblog-db",
+    url: process.env.DB_URL,
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting
