@@ -59,7 +59,7 @@ const schema = new Schema<MUser>(
 export namespace UserDB {
   export const ModelName = "user";
 
-  export const FullProjection: ProjectionType<MUser> = { password: 0 };
+  export const FullProjection: ProjectionType<MUser> = { password: false };
 
   export const SelectFullPopulation: (keyof MUser)[] = [
     "_id",
