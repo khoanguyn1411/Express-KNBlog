@@ -29,11 +29,10 @@ const authRoutePaths = buildRoutePaths({
 } as const);
 
 const userRoutePaths = buildRoutePaths({
-  user: {
-    path: "user",
+  users: {
+    path: "users",
     children: {
       profile: { path: "profile" },
-      list: { path: "list" },
     },
   },
 } as const);
