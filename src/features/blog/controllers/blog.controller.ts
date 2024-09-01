@@ -35,7 +35,7 @@ export namespace BlogController {
         BlogDB.Model.find({
           title: searchService.createSearchFor(queryParamFromDto.search),
         }).populate(BlogDB.ShortPopulation),
-      req,
+      queryParamFromDto,
     );
     res.status(SuccessCode.Accepted).send(pagination);
   }

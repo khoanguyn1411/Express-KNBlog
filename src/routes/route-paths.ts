@@ -33,6 +33,7 @@ const userRoutePaths = buildRoutePaths({
     path: "user",
     children: {
       profile: { path: "profile" },
+      list: { path: "list" },
     },
   },
 } as const);

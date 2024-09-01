@@ -1,7 +1,9 @@
 import { MUser, UserRole } from "../db-models/user.db";
 import { GoogleLoginDataDto } from "../dtos/google-login-data.dto";
 import { RegisterDataDto } from "../dtos/register-data.dto";
-import { User, UserCreation } from "../models/user";
+import { UserQueryDto } from "../dtos/user.dto";
+import { User, UserCreation, UserQuery } from "../models/user";
+import { paginationMapper } from "./pagination.mapper";
 
 class UserMapper {
   fromGoogleData(data: GoogleLoginDataDto): UserCreation {
@@ -37,6 +39,14 @@ class UserMapper {
       lastLogin: data.lastLogin,
       role: data.role,
       pictureUrl: data.pictureUrl,
+    };
+  }
+
+  fromQueryDto(data: UserQueryDto): UserQuery {
+    const pagination = paginationMapper.fromDto(data);
+    return {
+      ...pagination,
+      search: data.search ?? "",
     };
   }
 }
