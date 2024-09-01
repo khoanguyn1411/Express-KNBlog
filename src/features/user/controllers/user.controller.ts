@@ -1,12 +1,10 @@
 import { Response } from "express";
 
 import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
-import { UserDB } from "@/core/db-models/user.db";
+import { MUser, UserDB } from "@/core/db-models/user.db";
 import { UserQueryDto } from "@/core/dtos/user.dto";
 import { userMapper } from "@/core/mapper/user.mapper";
 import { Pagination } from "@/core/models/pagination";
-import { User } from "@/core/models/user";
-import { searchService } from "@/services/search.service";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { generateErrorWithCode } from "@/utils/funcs/generate-error";
 import { mapAndCreatePaginationFor } from "@/utils/funcs/map-and-create-pagination";
@@ -23,23 +21,16 @@ export namespace UserController {
       );
       return;
     }
-    const user = userMapper.fromMUser(fullUser);
-    res.status(SuccessCode.OK).send(user);
+    res.status(SuccessCode.OK).send(fullUser);
   }
 
   export async function getUsers(
     req: AppRequest<unknown, UserQueryDto>,
-    res: Response<Pagination<User>>,
+    res: Response<Pagination<MUser>>,
   ): Promise<void> {
     const queryParamFromDto = userMapper.fromQueryDto(req.query);
     const pagination = await mapAndCreatePaginationFor(
-      () =>
-        UserDB.Model.find(
-          {
-            firstName: searchService.createSearchFor(queryParamFromDto.search),
-          },
-          { lastName: true },
-        ),
+      () => UserDB.Model.find({}, UserDB.FullProjection),
       queryParamFromDto,
     );
     res.status(SuccessCode.Accepted).send(pagination);

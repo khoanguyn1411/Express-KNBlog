@@ -1,8 +1,7 @@
-import { model, Schema } from "mongoose";
+import { model, ProjectionType, Schema } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
 
-import { User } from "../models/user";
 import { MongooseBase } from "./mongoose";
 
 export enum UserRole {
@@ -59,7 +58,10 @@ const schema = new Schema<MUser>(
 
 export namespace UserDB {
   export const ModelName = "user";
-  export const SelectFullPopulation: (keyof User)[] = [
+
+  export const FullProjection: ProjectionType<MUser> = { password: 0 };
+
+  export const SelectFullPopulation: (keyof MUser)[] = [
     "_id",
     "firstName",
     "lastName",

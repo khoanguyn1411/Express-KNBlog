@@ -1,8 +1,8 @@
-import { MUser, UserRole } from "../db-models/user.db";
+import { UserRole } from "../db-models/user.db";
 import { GoogleLoginDataDto } from "../dtos/google-login-data.dto";
 import { RegisterDataDto } from "../dtos/register-data.dto";
 import { UserQueryDto } from "../dtos/user.dto";
-import { User, UserCreation, UserQuery } from "../models/user";
+import { UserCreation, UserQuery } from "../models/user";
 import { paginationMapper } from "./pagination.mapper";
 
 class UserMapper {
@@ -26,18 +26,6 @@ class UserMapper {
       lastLogin: new Date(),
       password: data.password,
       role: UserRole.Viewer,
-      pictureUrl: data.pictureUrl,
-    };
-  }
-
-  fromMUser(data: MUser): User {
-    return {
-      _id: data._id,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      lastLogin: data.lastLogin,
-      role: data.role,
       pictureUrl: data.pictureUrl,
     };
   }
