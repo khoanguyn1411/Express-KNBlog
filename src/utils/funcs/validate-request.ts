@@ -18,6 +18,7 @@ enum ValidationErrorCode {
   Min = "string.min",
   Number = "number.base",
   InvalidField = "object.unknown",
+  Custom = "custom",
 }
 
 const VALIDATION_ERROR_MAPPED: Record<ValidationErrorCode, (context: any) => string> = {
@@ -31,6 +32,7 @@ const VALIDATION_ERROR_MAPPED: Record<ValidationErrorCode, (context: any) => str
   [ValidationErrorCode.Max]: (context) =>
     `This field cannot exceed ${context.limit} characters long.`,
   [ValidationErrorCode.Domain]: () => "This field must be a valid domain.",
+  [ValidationErrorCode.Custom]: (context) => `${context.message}`,
 };
 
 type RequestInput<TSchema> = {
@@ -43,6 +45,7 @@ type RequestInput<TSchema> = {
  * @param errorItem The validation error item.
  */
 function getValidationCustomMessage(errorItem: ValidationErrorItem) {
+  console.log({ errorItem });
   const errorCode = errorItem.type as ValidationErrorCode;
   return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
 }

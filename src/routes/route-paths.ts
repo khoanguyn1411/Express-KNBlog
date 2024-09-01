@@ -1,8 +1,11 @@
-import { BlogParamDto } from "@/core/dtos/blog.dto";
-
 import { buildRoutePaths } from "./build-route-paths";
 
-export const BLOG_ID_PARAM_NAME: keyof BlogParamDto = "blogId";
+export const PARAM_NAME = {
+  BLOG_ID_PARAM_NAME: "blogId",
+  USER_ID_PARAM_NAME: "userId",
+} as const;
+
+export type ParamName = Record<(typeof PARAM_NAME)[keyof typeof PARAM_NAME], string>;
 
 const baseRoutePaths = buildRoutePaths({
   root: { path: "" },
@@ -40,8 +43,12 @@ const userRoutePaths = buildRoutePaths({
 const blogRoutePaths = buildRoutePaths({
   blogs: {
     path: "blogs",
+    children: {
+      detail: {
+        path: `:${PARAM_NAME.BLOG_ID_PARAM_NAME}`,
+      },
+    },
   },
-  blogDetail: { path: `blogs/:${BLOG_ID_PARAM_NAME}` },
 } as const);
 
 const uploadRoutePath = buildRoutePaths({

@@ -2,9 +2,10 @@ import { Response } from "express";
 
 import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
 import { BlogDB, MBlog } from "@/core/db-models/blog.db";
-import { BlogCreationDto, BlogParamDto, BlogQueryDto } from "@/core/dtos/blog.dto";
+import { BlogCreationDto, BlogQueryDto } from "@/core/dtos/blog.dto";
 import { blogMapper } from "@/core/mapper/blog.mapper";
 import { Pagination } from "@/core/models/pagination";
+import { ParamName } from "@/routes/route-paths";
 import { searchService } from "@/services/search.service";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
@@ -34,6 +35,7 @@ export namespace BlogController {
       () =>
         BlogDB.Model.find({
           title: searchService.createSearchFor(queryParamFromDto.search),
+          writtenBy: queryParamFromDto.userId,
         }).populate(BlogDB.ShortPopulation),
       queryParamFromDto,
     );
@@ -41,7 +43,7 @@ export namespace BlogController {
   }
 
   export async function getBlogById(
-    req: AppRequest<unknown, unknown, BlogParamDto>,
+    req: AppRequest<unknown, unknown, ParamName>,
     res: Response<MBlog | ResponseErrorType>,
   ): Promise<void> {
     const blog = await BlogDB.Model.findById(req.params.blogId).populate(BlogDB.ShortPopulation);

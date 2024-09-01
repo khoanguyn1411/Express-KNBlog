@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { isValidObjectId } from "mongoose";
 
 import { PaginationDto, paginationDtoSchema } from "./pagination.dto";
 
@@ -9,12 +10,9 @@ export interface BlogCreationDto {
   readonly bannerUrl: string;
 }
 
-export interface BlogParamDto {
-  readonly blogId: string;
-}
-
 export interface BlogQueryDto extends PaginationDto {
   readonly search: string | undefined;
+  readonly userId: string | undefined;
 }
 
 export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
@@ -26,4 +24,16 @@ export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
 
 export const blogQueryDtoSchema = paginationDtoSchema.append<BlogQueryDto>({
   search: Joi.string().optional().allow(""),
+  userId: Joi.string()
+    .optional()
+    .allow("")
+    .custom((value, helper) => {
+      if (!value) {
+        return true;
+      }
+      if (isValidObjectId(value)) {
+        return true;
+      }
+      return helper.message({ custom: "Invalid ID." }, { message: "Invalid ID." });
+    }),
 });

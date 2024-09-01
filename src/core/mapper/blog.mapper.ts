@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 import { BlogCreationDto, BlogQueryDto } from "../dtos/blog.dto";
 import { BlogCreation, BlogQuery } from "../models/blog";
 import { paginationMapper } from "./pagination.mapper";
@@ -17,6 +19,7 @@ class BlogMapper {
     return {
       ...pagination,
       search: data.search ?? "",
+      userId: new ObjectId(data.userId) ?? "",
     };
   }
 }
