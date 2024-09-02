@@ -37,6 +37,20 @@ export namespace UserController {
     res.status(SuccessCode.Accepted).send(pagination);
   }
 
+  export async function getUserById(
+    req: AppRequest<unknown, unknown, ParamName>,
+    res: Response<MUser | ResponseErrorType>,
+  ): Promise<void> {
+    const user = await UserDB.Model.findById(req.params.userId);
+    if (user == null) {
+      res
+        .status(ErrorCode.NotFound)
+        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: ["Invalid user ID."] }));
+      return;
+    }
+    res.status(SuccessCode.Accepted).send(user);
+  }
+
   export async function updateUser(
     req: AppRequest<UserUpdateDto, unknown, ParamName>,
     res: Response<MUser | ResponseErrorType>,

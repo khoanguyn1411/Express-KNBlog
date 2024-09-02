@@ -9,6 +9,7 @@ import { UserController } from "./controllers/user.controller";
 const router = Router();
 router.get(routePaths.users.children.profile.url, UserController.getProfile);
 router.get(routePaths.users.url, UserController.getUsers);
+router.get(routePaths.users.children.detail.url, UserController.getUserById);
 router.post(
   routePaths.users.children.detail.url,
   validateRequestBodyWithSchema(userUpdateDtoSchema),
