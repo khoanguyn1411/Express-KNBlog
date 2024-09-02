@@ -9,8 +9,9 @@ import { ParamName } from "@/routes/route-paths";
 import { searchService } from "@/services/search.service";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { assertNonNull } from "@/utils/funcs/assert-non-null";
+import { createFilters } from "@/utils/funcs/create-filters";
+import { createPagination } from "@/utils/funcs/create-pagination";
 import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate-error";
-import { mapAndCreatePaginationFor } from "@/utils/funcs/map-and-create-pagination";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace BlogController {
@@ -31,14 +32,16 @@ export namespace BlogController {
     res: Response<Pagination<MBlog>>,
   ): Promise<void> {
     const queryParamFromDto = blogMapper.fromQueryDto(req.query);
-    const pagination = await mapAndCreatePaginationFor(
-      () =>
-        BlogDB.Model.find({
-          title: searchService.createSearchFor(queryParamFromDto.search),
-          writtenBy: queryParamFromDto.userId,
-        }).populate(BlogDB.ShortPopulation),
-      queryParamFromDto,
-    );
+
+    const filters = createFilters<MBlog>({
+      title: searchService.createSearchFor(queryParamFromDto.search),
+      writtenBy: queryParamFromDto.userId,
+    });
+
+    const pagination = await createPagination(() => {
+      return BlogDB.Model.find(filters).populate(BlogDB.ShortPopulation);
+    }, queryParamFromDto);
+
     res.status(SuccessCode.Accepted).send(pagination);
   }
 

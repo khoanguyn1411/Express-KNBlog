@@ -6,8 +6,8 @@ import { UserQueryDto } from "@/core/dtos/user.dto";
 import { userMapper } from "@/core/mapper/user.mapper";
 import { Pagination } from "@/core/models/pagination";
 import { tokenHandlerService } from "@/services/token-handler.service";
+import { createPagination } from "@/utils/funcs/create-pagination";
 import { generateErrorWithCode } from "@/utils/funcs/generate-error";
-import { mapAndCreatePaginationFor } from "@/utils/funcs/map-and-create-pagination";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace UserController {
@@ -29,7 +29,7 @@ export namespace UserController {
     res: Response<Pagination<MUser>>,
   ): Promise<void> {
     const queryParamFromDto = userMapper.fromQueryDto(req.query);
-    const pagination = await mapAndCreatePaginationFor(
+    const pagination = await createPagination(
       () => UserDB.Model.find({}, UserDB.FullProjection),
       queryParamFromDto,
     );

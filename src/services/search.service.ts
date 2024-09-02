@@ -28,7 +28,7 @@ class SearchService {
   { timestamps: true },
 ).index({ title: "text" });
 
- const pagination = await mapAndCreatePaginationFor(
+ const pagination = await createPagination(
       () =>
         Blog.Model.find({ ...builtFullTextSearchQuery(queryParamFromDto.search) }).populate(
           Blog.ShortPopulation,
