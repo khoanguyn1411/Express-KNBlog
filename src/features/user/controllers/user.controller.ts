@@ -45,7 +45,7 @@ export namespace UserController {
     const updatedUser = await UserDB.Model.findOneAndUpdate(
       { _id: req.params.userId },
       userUpdateData,
-      { new: true },
+      { new: true, projection: UserDB.FullProjection },
     );
     if (updatedUser == null) {
       res
