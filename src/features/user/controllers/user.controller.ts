@@ -41,7 +41,7 @@ export namespace UserController {
     req: AppRequest<unknown, unknown, ParamName>,
     res: Response<MUser | ResponseErrorType>,
   ): Promise<void> {
-    const user = await UserDB.Model.findById(req.params.userId);
+    const user = await UserDB.Model.findById(req.params.userId, UserDB.FullProjection);
     if (user == null) {
       res
         .status(ErrorCode.NotFound)
