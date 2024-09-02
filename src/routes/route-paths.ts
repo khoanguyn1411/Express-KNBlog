@@ -36,6 +36,7 @@ const userRoutePaths = buildRoutePaths({
     path: "users",
     children: {
       profile: { path: "profile" },
+      detail: { path: `:${PARAM_NAME.USER_ID_PARAM_NAME}` },
     },
   },
 } as const);

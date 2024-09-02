@@ -8,7 +8,7 @@ export interface RegisterDataDto {
   readonly lastName: string;
 }
 
-export const RegisterDataDtoSchema = Joi.object<RegisterDataDto>({
+export const registerDataDtoSchema = Joi.object<RegisterDataDto>({
   pictureUrl: Joi.string().allow(null),
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),

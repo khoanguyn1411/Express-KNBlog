@@ -2,12 +2,13 @@ import { Response } from "express";
 
 import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
 import { MUser, UserDB } from "@/core/db-models/user.db";
-import { UserQueryDto } from "@/core/dtos/user.dto";
+import { UserQueryDto, UserUpdateDto } from "@/core/dtos/user.dto";
 import { userMapper } from "@/core/mapper/user.mapper";
 import { Pagination } from "@/core/models/pagination";
+import { ParamName } from "@/routes/route-paths";
 import { tokenHandlerService } from "@/services/token-handler.service";
 import { createPagination } from "@/utils/funcs/create-pagination";
-import { generateErrorWithCode } from "@/utils/funcs/generate-error";
+import { generateErrorWithCode, ResponseErrorType } from "@/utils/funcs/generate-error";
 import { AppRequest } from "@/utils/types/request";
 
 export namespace UserController {
@@ -34,5 +35,24 @@ export namespace UserController {
       queryParamFromDto,
     );
     res.status(SuccessCode.Accepted).send(pagination);
+  }
+
+  export async function updateUser(
+    req: AppRequest<UserUpdateDto, unknown, ParamName>,
+    res: Response<MUser | ResponseErrorType>,
+  ): Promise<void> {
+    const userUpdateData = userMapper.fromCreationDto(req.body);
+    const updatedUser = await UserDB.Model.findOneAndUpdate(
+      { _id: req.params.userId },
+      userUpdateData,
+      { new: true },
+    );
+    if (updatedUser == null) {
+      res
+        .status(ErrorCode.NotFound)
+        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: ["Invalid user ID."] }));
+      return;
+    }
+    res.status(SuccessCode.Accepted).send(updatedUser);
   }
 }

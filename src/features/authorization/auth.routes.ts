@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { GoogleLoginDataDtoSchema } from "@/core/dtos/google-login-data.dto";
 import { LoginDataDtoSchema } from "@/core/dtos/login-data.dto";
-import { RegisterDataDtoSchema } from "@/core/dtos/register-data.dto";
+import { registerDataDtoSchema } from "@/core/dtos/register-data.dto";
 import { refreshTokenDtoSchema } from "@/core/dtos/token.dto";
 import { validateRequestBodyWithSchema } from "@/utils/funcs/validate-request";
 
@@ -25,7 +25,7 @@ router.post(
 );
 router.post(
   authUrl.register.url,
-  validateRequestBodyWithSchema(RegisterDataDtoSchema),
+  validateRequestBodyWithSchema(registerDataDtoSchema),
   AuthController.register,
 );
 router.post(authUrl.logout.url, AuthController.logout);
