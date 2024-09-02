@@ -11,7 +11,12 @@ const NON_AUTHORIZED_ROUTES = [
   routePaths.auth.children.register.url,
   routePaths.auth.children.googleLogin.url,
   routePaths.auth.children.token.children.refresh.url,
+  routePaths.auth.children.token.children,
+
   routePaths.blogs.url,
+  routePaths.blogs.children.detail.url,
+
+  routePaths.users.url,
 ];
 
 function canProceedWithoutAuthorization(url: string): boolean {
@@ -23,7 +28,7 @@ export async function requireAuthorizationMiddleware(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  if (canProceedWithoutAuthorization(req.url)) {
+  if (canProceedWithoutAuthorization(req.path)) {
     next();
     return;
   }
