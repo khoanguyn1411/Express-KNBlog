@@ -108,6 +108,7 @@ export namespace BlogDB {
         writtenBy: UserDB.ProjectionFull,
       },
     },
+    { $unwind: "$writtenBy" },
   ];
 
   export const ShortPopulation: PopulateOptions[] = [
