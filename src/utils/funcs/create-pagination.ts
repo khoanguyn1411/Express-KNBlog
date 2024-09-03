@@ -17,7 +17,6 @@ export async function createPagination<
   let count = 0;
   if (schemaCallback() instanceof Aggregate) {
     const counterResult = await (schemaCallback() as Aggregate<T[]>).count("count");
-    console.log(counterResult);
     count = counterResult[0]?.count ?? 0;
   } else {
     count = await (schemaCallback() as Query<T[], E>).count();

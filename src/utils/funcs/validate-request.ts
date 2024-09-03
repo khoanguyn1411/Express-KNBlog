@@ -45,7 +45,6 @@ type RequestInput<TSchema> = {
  * @param errorItem The validation error item.
  */
 function getValidationCustomMessage(errorItem: ValidationErrorItem) {
-  console.log({ errorItem });
   const errorCode = errorItem.type as ValidationErrorCode;
   return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
 }
