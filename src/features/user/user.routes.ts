@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { userUpdateDtoSchema } from "@/core/dtos/user.dto";
+import { requireAuthorizationMiddleware } from "@/middlewares/require-authorization.middleware";
 import { validateRequestBodyWithSchema } from "@/utils/funcs/validate-request";
 
 import { routePaths } from "../../routes/route-paths";
@@ -12,6 +13,7 @@ router.get(routePaths.users.url, UserController.getUsers);
 router.get(routePaths.users.children.detail.url, UserController.getUserById);
 router.post(
   routePaths.users.children.detail.url,
+  requireAuthorizationMiddleware,
   validateRequestBodyWithSchema(userUpdateDtoSchema),
   UserController.updateUser,
 );

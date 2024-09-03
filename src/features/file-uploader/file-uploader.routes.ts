@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 
 import { requestPasswordDtoSchema } from "@/core/dtos/request-password.dto";
+import { requireAuthorizationMiddleware } from "@/middlewares/require-authorization.middleware";
 import {
   IMAGE_MIME_TYPES,
   validateFileType,
@@ -13,8 +14,8 @@ import { routePaths } from "../../routes/route-paths";
 import { FileUploaderController } from "./controllers/file-uploader.controller";
 
 const upload = multer();
-
 const router = Router();
+
 router.post(
   routePaths.upload.url,
   upload.single("file"),
@@ -35,4 +36,5 @@ router.delete(
   validateRequestBodyWithSchema(requestPasswordDtoSchema),
   FileUploaderController.removeAllFiles,
 );
-export const uploadRoutes = router;
+
+export const uploadRoutes = router.all("*", requireAuthorizationMiddleware);
