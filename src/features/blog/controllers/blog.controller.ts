@@ -36,11 +36,13 @@ export namespace BlogController {
 
     const filters = createFilters<MBlog>({
       title: searchService.createSearchFor(queryParamFromDto.search),
-      writtenBy: queryParamFromDto.userId,
+      writtenBy: queryParamFromDto.userId ? new ObjectId(queryParamFromDto.userId) : null,
     });
 
     const pagination = await createPagination(() => {
-      return BlogDB.Model.aggregate<MBlog>(BlogDB.PipelineStagesList).match(filters);
+      return BlogDB.Model.aggregate<MBlog>()
+        .match(filters)
+        .append(...BlogDB.PipelineStagesList);
     }, queryParamFromDto);
 
     res.status(SuccessCode.Accepted).send(pagination);
