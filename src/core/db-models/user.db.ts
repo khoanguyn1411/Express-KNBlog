@@ -2,6 +2,7 @@ import { model, ProjectionType, Schema } from "mongoose";
 
 import { enumToArray } from "@/utils/funcs/enum-to-array";
 
+import { MODEL_NAMES } from "./key";
 import { MongooseBase } from "./mongoose";
 
 export enum UserRole {
@@ -57,11 +58,9 @@ const schema = new Schema<MUser>(
 );
 
 export namespace UserDB {
-  export const ModelName = "user";
+  export const ProjectionFull: ProjectionType<MUser> = { password: false };
 
-  export const FullProjection: ProjectionType<MUser> = { password: false };
-
-  export const SelectFullPopulation: (keyof MUser)[] = [
+  export const SelectFull: (keyof MUser)[] = [
     "_id",
     "firstName",
     "lastName",
@@ -70,5 +69,6 @@ export namespace UserDB {
     "lastLogin",
     "role",
   ];
-  export const Model = model(ModelName, schema);
+
+  export const Model = model(MODEL_NAMES.User, schema);
 }

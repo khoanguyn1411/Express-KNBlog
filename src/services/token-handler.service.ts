@@ -58,7 +58,7 @@ export class TokenHandlerService {
       }
       return userIdDecoded == null
         ? null
-        : await UserDB.Model.findById(userIdDecoded._id, UserDB.FullProjection);
+        : await UserDB.Model.findById(userIdDecoded._id, UserDB.ProjectionFull);
     } catch (e) {
       console.error(e);
       return null;

@@ -31,7 +31,7 @@ export namespace UserController {
   ): Promise<void> {
     const queryParamFromDto = userMapper.fromQueryDto(req.query);
     const pagination = await createPagination(
-      () => UserDB.Model.find({}, UserDB.FullProjection),
+      () => UserDB.Model.find({}, UserDB.ProjectionFull),
       queryParamFromDto,
     );
     res.status(SuccessCode.Accepted).send(pagination);
@@ -41,7 +41,7 @@ export namespace UserController {
     req: AppRequest<unknown, unknown, ParamName>,
     res: Response<MUser | ResponseErrorType>,
   ): Promise<void> {
-    const user = await UserDB.Model.findById(req.params.userId, UserDB.FullProjection);
+    const user = await UserDB.Model.findById(req.params.userId, UserDB.ProjectionFull);
     if (user == null) {
       res
         .status(ErrorCode.NotFound)
@@ -59,7 +59,7 @@ export namespace UserController {
     const updatedUser = await UserDB.Model.findOneAndUpdate(
       { _id: req.params.userId },
       userUpdateData,
-      { new: true, projection: UserDB.FullProjection },
+      { new: true, projection: UserDB.ProjectionFull },
     );
     if (updatedUser == null) {
       res

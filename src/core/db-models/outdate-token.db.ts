@@ -2,8 +2,8 @@ import { ObjectId } from "mongodb";
 import { model, Schema } from "mongoose";
 
 import { Token } from "../models/token";
+import { MODEL_NAMES } from "./key";
 import { MongooseBase } from "./mongoose";
-import { UserDB } from "./user.db";
 
 export interface MOutdateToken {
   readonly accessToken: Token["accessToken"];
@@ -18,7 +18,7 @@ const schema = new Schema<MOutdateToken>(
     },
     user: {
       type: ObjectId,
-      ref: UserDB.ModelName,
+      ref: MODEL_NAMES.User,
       required: true,
     },
   },
@@ -26,6 +26,6 @@ const schema = new Schema<MOutdateToken>(
 );
 
 export namespace OutdateTokenDB {
-  export const ModelName = "outdateToken";
+  export const ModelName = "outdate-token";
   export const Model = model(ModelName, schema);
 }

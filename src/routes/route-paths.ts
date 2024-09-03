@@ -52,6 +52,12 @@ const blogRoutePaths = buildRoutePaths({
   },
 } as const);
 
+const blogEmoticonRoutePaths = buildRoutePaths({
+  blogEmoticon: {
+    path: "blog-emoticon",
+  },
+} as const);
+
 const uploadRoutePath = buildRoutePaths({
   upload: {
     path: "upload",
@@ -69,5 +75,6 @@ export const routePaths = {
   ...authRoutePaths,
   ...userRoutePaths,
   ...blogRoutePaths,
+  ...blogEmoticonRoutePaths,
   ...uploadRoutePath,
 };

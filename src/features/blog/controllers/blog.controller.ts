@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { ObjectId } from "mongodb";
 
 import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
 import { BlogDB, MBlog } from "@/core/db-models/blog.db";
@@ -39,7 +40,7 @@ export namespace BlogController {
     });
 
     const pagination = await createPagination(() => {
-      return BlogDB.Model.find(filters).populate(BlogDB.ShortPopulation);
+      return BlogDB.Model.aggregate<MBlog>(BlogDB.PipelineStagesList).match(filters);
     }, queryParamFromDto);
 
     res.status(SuccessCode.Accepted).send(pagination);
@@ -49,13 +50,16 @@ export namespace BlogController {
     req: AppRequest<unknown, unknown, ParamName>,
     res: Response<MBlog | ResponseErrorType>,
   ): Promise<void> {
-    const blog = await BlogDB.Model.findById(req.params.blogId).populate(BlogDB.ShortPopulation);
-    if (blog == null) {
+    const blogs = await BlogDB.Model.aggregate<MBlog>(BlogDB.PipelineStagesDetail).match({
+      _id: new ObjectId(req.params.blogId),
+    });
+
+    if (blogs[0] == null) {
       res
         .status(ErrorCode.NotFound)
         .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: ["Invalid blog ID."] }));
       return;
     }
-    res.status(SuccessCode.Accepted).send(blog);
+    res.status(SuccessCode.Accepted).send(blogs[0]);
   }
 }

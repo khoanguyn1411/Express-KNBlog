@@ -1,4 +1,4 @@
-import { Query } from "mongoose";
+import { Aggregate, Query } from "mongoose";
 
 import { Pagination, PaginationBase } from "@/core/models/pagination";
 import { RecordObject } from "@/routes/build-route-paths";
@@ -8,13 +8,21 @@ import { RecordObject } from "@/routes/build-route-paths";
  * @param schemaCallback Need to be a callback to prevent mongoose model execute queries multiple times.
  * @param req Request.
  */
-export async function createPagination<T extends RecordObject, E, K extends PaginationBase>(
-  schemaCallback: () => Query<T[], E>,
-  pagination: K,
-): Promise<Pagination<T>> {
+export async function createPagination<
+  T extends RecordObject,
+  E extends RecordObject = RecordObject,
+  K extends PaginationBase = PaginationBase,
+>(schemaCallback: () => Query<T[], E> | Aggregate<T[]>, pagination: K): Promise<Pagination<T>> {
   const { limit, offset } = pagination;
-  const count = await schemaCallback().count();
-  const results = await schemaCallback().limit(limit).skip(offset);
+  let count = 0;
+  if (schemaCallback() instanceof Aggregate) {
+    const counterResult = await (schemaCallback() as Aggregate<T[]>).count("count");
+    console.log(counterResult);
+    count = counterResult[0]?.count ?? 0;
+  } else {
+    count = await (schemaCallback() as Query<T[], E>).count();
+  }
+  const results = (await schemaCallback().limit(limit).skip(offset)) as T[];
 
   // Check if there's a next page
   const hasNextPage = offset + results.length < count;
