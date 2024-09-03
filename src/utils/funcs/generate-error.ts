@@ -24,6 +24,12 @@ type InputError<TError extends RecordObject> = {
   readonly nonFieldErrors?: string[];
 };
 
+type GenerateErrorWithCodeParam<T extends RecordObject> = {
+  code: ErrorCode;
+  error?: InputError<T>;
+  message?: string;
+};
+
 function generateError<T extends RecordObject>(
   errorDetail: string,
   error?: InputError<T>,
@@ -48,11 +54,15 @@ function generateError<T extends RecordObject>(
   };
 }
 
-export function generateErrorWithCode<T extends RecordObject>(
-  code: ErrorCode,
-  error?: InputError<T>,
-): ResponseErrorType<T> {
+export function generateErrorWithCode<T extends RecordObject>({
+  code,
+  message,
+  error,
+}: GenerateErrorWithCodeParam<T>): ResponseErrorType<T> {
   let detailMessage = READABLE_ERROR_CODE[code];
+  if (message) {
+    detailMessage = message;
+  }
   if (detailMessage == null) {
     detailMessage = "Unknown error.";
   }

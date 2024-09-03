@@ -55,6 +55,11 @@ const blogRoutePaths = buildRoutePaths({
 const blogEmoticonRoutePaths = buildRoutePaths({
   blogEmoticon: {
     path: "blog-emoticon",
+    children: {
+      detail: {
+        path: `:${PARAM_NAME.BLOG_ID_PARAM_NAME}`,
+      },
+    },
   },
 } as const);
 

@@ -6,5 +6,5 @@ import { generateErrorWithCode } from "./generate-error";
 
 export function sendUnauthorizedError(res: Response): void {
   const errorCode = ErrorCode.Unauthorized;
-  res.status(errorCode).send(generateErrorWithCode(errorCode));
+  res.status(errorCode).send(generateErrorWithCode({ code: errorCode }));
 }

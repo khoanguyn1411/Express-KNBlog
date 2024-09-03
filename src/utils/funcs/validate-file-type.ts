@@ -63,11 +63,12 @@ export function validateUploadFileRequestSchema(
 ) {
   const file = req.file;
   if (file == null) {
-    res
-      .status(ErrorCode.BadData)
-      .send(
-        generateErrorWithCode(ErrorCode.BadData, { data: { file: ["This field is required."] } }),
-      );
+    res.status(ErrorCode.BadData).send(
+      generateErrorWithCode({
+        code: ErrorCode.BadData,
+        error: { data: { file: ["This field is required."] } },
+      }),
+    );
     return;
   }
   next();
@@ -79,8 +80,11 @@ export function validateFileType(mimeTypes: readonly MimeType[]) {
     const validFileTypes = mimeTypes.join(", ");
     if (!mimeTypes.includes(req.file.mimetype as MimeType)) {
       res.status(ErrorCode.BadData).send(
-        generateErrorWithCode(ErrorCode.BadData, {
-          data: { file: [`Invalid file type. Allow: ${validFileTypes}`] },
+        generateErrorWithCode({
+          code: ErrorCode.BadData,
+          error: {
+            data: { file: [`Invalid file type. Allow: ${validFileTypes}`] },
+          },
         }),
       );
       return;

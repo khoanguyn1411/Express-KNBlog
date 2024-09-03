@@ -16,8 +16,9 @@ export namespace UserController {
     const fullUser = await tokenHandlerService.getUserFromHeaderToken(req);
     if (fullUser == null) {
       res.status(ErrorCode.InternalServer).send(
-        generateErrorWithCode(ErrorCode.InternalServer, {
-          nonFieldErrors: ["Could not find user profile."],
+        generateErrorWithCode({
+          code: ErrorCode.InternalServer,
+          message: "Could not find user profile.",
         }),
       );
       return;
@@ -45,7 +46,7 @@ export namespace UserController {
     if (user == null) {
       res
         .status(ErrorCode.NotFound)
-        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: ["Invalid user ID."] }));
+        .send(generateErrorWithCode({ code: ErrorCode.NotFound, message: "Invalid user ID." }));
       return;
     }
     res.status(SuccessCode.Accepted).send(user);
@@ -64,7 +65,7 @@ export namespace UserController {
     if (updatedUser == null) {
       res
         .status(ErrorCode.NotFound)
-        .send(generateErrorWithCode(ErrorCode.NotFound, { nonFieldErrors: ["Invalid user ID."] }));
+        .send(generateErrorWithCode({ code: ErrorCode.NotFound, message: "Invalid user ID." }));
       return;
     }
     res.status(SuccessCode.Accepted).send(updatedUser);

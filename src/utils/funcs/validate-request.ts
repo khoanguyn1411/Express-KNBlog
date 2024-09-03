@@ -59,7 +59,7 @@ function sendValidationErrorResponse<T extends Nullable<RecordObject> | undefine
 ) {
   res
     .status(ErrorCode.BadData)
-    .send(generateErrorWithCode(ErrorCode.BadData, { data: validationError }));
+    .send(generateErrorWithCode({ code: ErrorCode.BadData, error: { data: validationError } }));
 }
 
 /**
