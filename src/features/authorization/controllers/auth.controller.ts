@@ -25,8 +25,11 @@ import { AppRequest } from "@/utils/types/request";
 function sendUnableLoginError(res: Response) {
   const errorCode = ErrorCode.BadData;
   res.status(errorCode).send(
-    generateErrorWithCode<LoginDataDto>(errorCode, {
-      nonFieldErrors: ["Unable to login with your credential."],
+    generateErrorWithCode<LoginDataDto>({
+      code: errorCode,
+      error: {
+        nonFieldErrors: ["Unable to login with your credential."],
+      },
     }),
   );
 }
@@ -93,8 +96,11 @@ export namespace AuthController {
     const userCreation = userMapper.fromRegisterData(registerData);
     const isEmailExists = (await UserDB.Model.findOne({ email: userCreation.email })) != null;
     if (isEmailExists) {
-      const error = generateErrorWithCode<RegisterData>(ErrorCode.BadData, {
-        data: { email: ["Email already existed."] },
+      const error = generateErrorWithCode<RegisterData>({
+        code: ErrorCode.BadData,
+        error: {
+          data: { email: ["Email already existed."] },
+        },
       });
       res.status(ErrorCode.BadData).send(error);
       return;
