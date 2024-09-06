@@ -34,7 +34,6 @@ export namespace BlogController {
   ): Promise<void> {
     const queryParamFromDto = blogMapper.fromQueryDto(req.query);
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
-    assertNonNull(user);
 
     const filters = createFilters<MBlog>({
       title: searchService.createSearchFor(queryParamFromDto.search),
@@ -60,7 +59,6 @@ export namespace BlogController {
       BlogDB.ShortPopulation,
     );
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
-    assertNonNull(user);
 
     if (blog == null) {
       res

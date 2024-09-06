@@ -53,10 +53,10 @@ export namespace BlogDB {
     },
   ];
 
-  export async function getAggregatedResult(blog: MBlog, currentUser: MUser) {
+  export async function getAggregatedResult(blog: MBlog, currentUser: MUser | null) {
     const [emoticonCount, likedBlog] = await Promise.all([
       BlogEmoticonDB.Model.count({ blog: blog._id }),
-      BlogEmoticonDB.Model.findOne({ blog: blog._id, user: currentUser }),
+      currentUser ? BlogEmoticonDB.Model.findOne({ blog: blog._id, user: currentUser }) : null,
     ]);
     return {
       ...blog,
