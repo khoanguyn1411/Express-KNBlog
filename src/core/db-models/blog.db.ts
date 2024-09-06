@@ -1,7 +1,8 @@
 import { ObjectId } from "mongodb";
-import { model, PipelineStage, PopulateOptions, ProjectionType, Schema } from "mongoose";
+import { model, PopulateOptions, ProjectionType, Schema } from "mongoose";
 
-import { getDbKey, MODEL_NAMES } from "./key";
+import { BlogEmoticonDB } from "./blog-emoticon.db";
+import { MODEL_NAMES } from "./key";
 import { MongooseBase } from "./mongoose";
 import { MUser, UserDB } from "./user.db";
 
@@ -45,76 +46,22 @@ export namespace BlogDB {
 
   export const ProjectionShort: ProjectionType<MBlog> = { content: false };
 
-  export const PipelineStagesList: PipelineStage[] = [
-    {
-      $lookup: {
-        from: getDbKey(MODEL_NAMES.BlogEmoticon),
-        localField: "_id",
-        foreignField: "blog",
-        as: "likesInfo",
-      },
-    },
-    {
-      $addFields: {
-        emoticonCount: { $size: "$likesInfo" },
-      },
-    },
-
-    {
-      $lookup: {
-        from: getDbKey(MODEL_NAMES.User),
-        localField: "writtenBy",
-        foreignField: "_id",
-        as: "writtenBy",
-      },
-    },
-
-    {
-      $project: {
-        ...ProjectionShort,
-        likesInfo: false,
-        writtenBy: UserDB.ProjectionFull,
-      },
-    },
-
-    { $unwind: "$writtenBy" },
-  ];
-
-  export const PipelineStagesDetail: PipelineStage[] = [
-    {
-      $lookup: {
-        from: getDbKey(MODEL_NAMES.BlogEmoticon),
-        localField: "_id",
-        foreignField: "blog",
-        as: "likesInfo",
-      },
-    },
-    {
-      $addFields: {
-        emoticonCount: { $size: "$likesInfo" },
-      },
-    },
-    {
-      $lookup: {
-        from: getDbKey(MODEL_NAMES.User),
-        localField: "writtenBy",
-        foreignField: "_id",
-        as: "writtenBy",
-      },
-    },
-    {
-      $project: {
-        likesInfo: false,
-        writtenBy: UserDB.ProjectionFull,
-      },
-    },
-    { $unwind: "$writtenBy" },
-  ];
-
   export const ShortPopulation: PopulateOptions[] = [
     {
       path: "writtenBy",
       select: UserDB.SelectFull,
     },
   ];
+
+  export async function getAggregatedResults(blog: MBlog, currentUser: MUser) {
+    const [emoticonCount, likedBlog] = await Promise.all([
+      BlogEmoticonDB.Model.count({ blog: blog._id }),
+      BlogEmoticonDB.Model.findOne({ blog: blog._id, user: currentUser }),
+    ]);
+    return {
+      ...blog,
+      emoticonCount,
+      isUserLiked: likedBlog != null,
+    };
+  }
 }

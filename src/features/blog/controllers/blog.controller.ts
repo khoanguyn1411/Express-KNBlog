@@ -33,6 +33,8 @@ export namespace BlogController {
     res: Response<Pagination<MBlog>>,
   ): Promise<void> {
     const queryParamFromDto = blogMapper.fromQueryDto(req.query);
+    const user = await tokenHandlerService.getUserFromHeaderToken(req);
+    assertNonNull(user);
 
     const filters = createFilters<MBlog>({
       title: searchService.createSearchFor(queryParamFromDto.search),
@@ -40,28 +42,31 @@ export namespace BlogController {
     });
 
     const pagination = await createPagination(() => {
-      return BlogDB.Model.aggregate<MBlog>()
-        .match(filters)
-        .append(...BlogDB.PipelineStagesList);
+      return BlogDB.Model.find(filters, undefined, { lean: true }).populate(BlogDB.ShortPopulation);
     }, queryParamFromDto);
 
-    res.status(SuccessCode.Accepted).send(pagination);
+    const aggregatedResults = await Promise.all(
+      pagination.results.map((blog) => BlogDB.getAggregatedResults(blog, user)),
+    );
+
+    res.status(SuccessCode.Accepted).send({ ...pagination, results: aggregatedResults });
   }
 
   export async function getBlogById(
     req: AppRequest<unknown, unknown, ParamName>,
     res: Response<MBlog | ResponseErrorType>,
   ): Promise<void> {
-    const blogs = await BlogDB.Model.aggregate<MBlog>(BlogDB.PipelineStagesDetail).match({
-      _id: new ObjectId(req.params.blogId),
-    });
+    const blog = await BlogDB.Model.findById(req.params.blogId).populate(BlogDB.ShortPopulation);
+    const user = await tokenHandlerService.getUserFromHeaderToken(req);
+    assertNonNull(user);
 
-    if (blogs[0] == null) {
+    if (blog == null) {
       res
         .status(ErrorCode.NotFound)
         .send(generateErrorWithCode({ code: ErrorCode.NotFound, message: "Blog not found." }));
       return;
     }
-    res.status(SuccessCode.Accepted).send(blogs[0]);
+    const aggregatedResult = await BlogDB.getAggregatedResults(blog, user);
+    res.status(SuccessCode.Accepted).send(aggregatedResult);
   }
 }

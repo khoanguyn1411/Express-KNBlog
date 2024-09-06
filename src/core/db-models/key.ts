@@ -1,8 +1,8 @@
 export const MODEL_NAMES = {
   Blog: "blog",
   User: "user",
-  OutdateToken: "outdate-token",
-  BlogEmoticon: "blog-emoticon",
+  OutdateToken: "outdateToken",
+  BlogEmoticon: "blogEmoticon",
 } as const;
 
 export function getDbKey(name: (typeof MODEL_NAMES)[keyof typeof MODEL_NAMES]) {
