@@ -56,7 +56,9 @@ export namespace BlogController {
     req: AppRequest<unknown, unknown, ParamName>,
     res: Response<MBlog | ResponseErrorType>,
   ): Promise<void> {
-    const blog = await BlogDB.Model.findById(req.params.blogId).populate(BlogDB.ShortPopulation);
+    const blog = await BlogDB.Model.findById(req.params.blogId, undefined, { lean: true }).populate(
+      BlogDB.ShortPopulation,
+    );
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
     assertNonNull(user);
 
