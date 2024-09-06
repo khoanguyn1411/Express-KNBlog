@@ -68,7 +68,7 @@ export namespace BlogController {
         .send(generateErrorWithCode({ code: ErrorCode.NotFound, message: "Blog not found." }));
       return;
     }
-    const aggregatedResult = await BlogDB.getAggregatedResults(blog, user);
+    const aggregatedResult = await BlogDB.getAggregatedResult(blog, user);
     res.status(SuccessCode.Accepted).send(aggregatedResult);
   }
 }
