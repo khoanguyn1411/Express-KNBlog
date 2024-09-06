@@ -46,7 +46,7 @@ export namespace BlogController {
     }, queryParamFromDto);
 
     const aggregatedResults = await Promise.all(
-      pagination.results.map((blog) => BlogDB.getAggregatedResults(blog, user)),
+      pagination.results.map((blog) => BlogDB.getAggregatedResult(blog, user)),
     );
 
     res.status(SuccessCode.Accepted).send({ ...pagination, results: aggregatedResults });
