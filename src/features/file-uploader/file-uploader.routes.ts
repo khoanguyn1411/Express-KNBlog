@@ -18,12 +18,14 @@ const router = Router();
 
 router.post(
   routePaths.upload.url,
+  requireAuthorizationMiddleware,
   upload.single("file"),
   validateUploadFileRequestSchema,
   FileUploaderController.uploadFile,
 );
 router.post(
   routePaths.upload.children.image.url,
+  requireAuthorizationMiddleware,
   upload.single("file"),
   validateUploadFileRequestSchema,
   validateFileType(IMAGE_MIME_TYPES),
@@ -33,8 +35,9 @@ router.post(
 /** Backend internal usage, for clearing data after in google drive test. */
 router.delete(
   routePaths.upload.url,
+  requireAuthorizationMiddleware,
   validateRequestBodyWithSchema(requestPasswordDtoSchema),
   FileUploaderController.removeAllFiles,
 );
 
-export const uploadRoutes = router.all("*", requireAuthorizationMiddleware);
+export const uploadRoutes = router.all("*");

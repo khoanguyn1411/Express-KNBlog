@@ -5,7 +5,7 @@ import { serve, setup } from "swagger-ui-express";
 import { routePaths } from "@/routes/route-paths";
 
 // Swagger definition
-const swaggerDefinition: swaggerJSDoc.Options["swaggerDefinition"] = {
+const swaggerDefinition: swaggerJSDoc.Options["definition"] = {
   openapi: "3.0.0",
   info: {
     title: "My Express API",
@@ -15,7 +15,10 @@ const swaggerDefinition: swaggerJSDoc.Options["swaggerDefinition"] = {
 };
 
 // Initialize swagger-jsdoc
-const swaggerSpec = swaggerJSDoc({ swaggerDefinition, apis: ["./features/*.routes.ts"] });
+const swaggerSpec = swaggerJSDoc({
+  definition: swaggerDefinition,
+  apis: [],
+});
 
 const router = Router();
 

@@ -14,13 +14,15 @@ const router = Router();
 
 router.post(
   routePaths.blogEmoticon.url,
+  requireAuthorizationMiddleware,
   validateRequestBodyWithSchema(blogEmoticonCreationDtoSchema),
   BlogEmoticonController.addEmoticon,
 );
 router.delete(
   routePaths.blogEmoticon.children.detail.url,
+  requireAuthorizationMiddleware,
   validateParamObjectId(PARAM_NAME.BLOG_ID_PARAM_NAME),
   BlogEmoticonController.removeEmoticon,
 );
 
-export const blogEmoticonRoutes = router.all("*", requireAuthorizationMiddleware);
+export const blogEmoticonRoutes = router.all("*");
