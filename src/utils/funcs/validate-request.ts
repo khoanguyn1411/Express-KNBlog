@@ -46,7 +46,11 @@ type RequestInput<TSchema> = {
  */
 function getValidationCustomMessage(errorItem: ValidationErrorItem) {
   const errorCode = errorItem.type as ValidationErrorCode;
-  return [VALIDATION_ERROR_MAPPED[errorCode](errorItem.context) ?? errorItem.message];
+  return [
+    VALIDATION_ERROR_MAPPED[errorCode]
+      ? VALIDATION_ERROR_MAPPED[errorCode](errorItem.context)
+      : errorItem.message,
+  ];
 }
 
 /**
