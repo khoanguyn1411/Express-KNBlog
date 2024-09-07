@@ -6,6 +6,7 @@ import { BlogDB, MBlog } from "@/core/db-models/blog.db";
 import { BlogEmoticonDB } from "@/core/db-models/blog-emoticon.db";
 import { BlogCreationDto, BlogQueryDto } from "@/core/dtos/blog.dto";
 import { blogMapper } from "@/core/mapper/blog.mapper";
+import { BlogsHaveEmoticonsQuery } from "@/core/models/blogs-have-emoticons-query";
 import { Pagination } from "@/core/models/pagination";
 import { ParamName } from "@/routes/route-paths";
 import { searchService } from "@/services/search.service";
@@ -72,16 +73,14 @@ export namespace BlogController {
   }
 
   export async function getBlogsHaveEmoticons(
-    req: AppRequest<{ readonly blogIds: MBlog["_id"][] }>,
+    req: AppRequest<unknown, BlogsHaveEmoticonsQuery>,
     res: Response<MBlog["_id"][]>,
   ): Promise<void> {
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
     assertNonNull(user);
 
-    console.log(req.body);
-
     const emoticonRequests = await Promise.all(
-      req.body.blogIds.map((blogId) =>
+      req.query.blogIds.map((blogId) =>
         BlogEmoticonDB.Model.findOne({ blog: blogId, user: user._id }, undefined, { lean: true }),
       ),
     );
