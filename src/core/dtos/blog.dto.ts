@@ -1,5 +1,7 @@
 import Joi from "joi";
 
+import { CustomValidator } from "@/utils/funcs/custom-validator";
+
 import { PaginationDto, paginationDtoSchema } from "./pagination.dto";
 
 export interface BlogCreationDto {
@@ -21,24 +23,8 @@ export const blogCreationDtoSchema = Joi.object<BlogCreationDto>({
   bannerUrl: Joi.string().optional().allow(null),
 });
 
+// Custom schema validation demo.
 export const blogQueryDtoSchema = paginationDtoSchema.append<BlogQueryDto>({
   search: Joi.string().optional().allow(""),
-  userId: Joi.string().optional().allow(""),
+  userId: Joi.string().optional().allow("").custom(CustomValidator.validObjectId),
 });
-
-// Custom schema validation demo.
-// export const blogQueryDtoSchema = paginationDtoSchema.append<BlogQueryDto>({
-//   search: Joi.string().optional().allow(""),
-//   userId: Joi.string()
-//     .optional()
-//     .allow("")
-//     .custom((value, helper) => {
-//       if (!value) {
-//         return true;
-//       }
-//       if (isValidObjectId(value)) {
-//         return true;
-//       }
-//       return helper.message({ custom: "Invalid ID." }, { message: "Invalid ID." });
-//     }),
-// });

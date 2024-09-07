@@ -93,11 +93,21 @@ export function generateValidationError<TSchema extends RecordObject>(error?: Jo
  * @param schema The Joi schema to validate the request body against.
  * @param req The Express request object containing the request body.
  */
-export function validateRequestBody<TSchema extends RecordObject>({
+function validateRequestBody<TSchema extends RecordObject>({ schema, req }: RequestInput<TSchema>) {
+  const { error } = schema.validate(req.body);
+  return generateValidationError(error);
+}
+
+/**
+ * Validates the request query parameters against a given Joi schema.
+ * @param schema The Joi schema to validate the request query parameters against.
+ * @param req The Express request object containing the request query parameters.
+ */
+function validateRequestQuery<TSchema extends RecordObject>({
   schema,
   req,
 }: RequestInput<TSchema>) {
-  const { error } = schema.validate(req.body);
+  const { error } = schema.validate(req.query);
   return generateValidationError(error);
 }
 
@@ -114,19 +124,6 @@ export function validateRequestBodyWithSchema<T extends RecordObject>(schema: Jo
     }
     sendValidationErrorResponse(res, validationError);
   };
-}
-
-/**
- * Validates the request query parameters against a given Joi schema.
- * @param schema The Joi schema to validate the request query parameters against.
- * @param req The Express request object containing the request query parameters.
- */
-export function validateRequestQuery<TSchema extends RecordObject>({
-  schema,
-  req,
-}: RequestInput<TSchema>) {
-  const { error } = schema.validate(req.query);
-  return generateValidationError(error);
 }
 
 /**
