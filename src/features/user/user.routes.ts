@@ -17,13 +17,13 @@ router.get(routePaths.users.children.profile.url, UserController.getProfile);
 router.get(routePaths.users.url, UserController.getUsers);
 router.get(
   routePaths.users.children.detail.url,
-  validateParamObjectId(PARAM_NAME.BLOG_ID_PARAM_NAME),
+  validateParamObjectId(PARAM_NAME.USER_ID_PARAM_NAME),
   UserController.getUserById,
 );
 router.post(
   routePaths.users.children.detail.url,
   requireAuthorizationMiddleware,
-  validateParamObjectId(PARAM_NAME.BLOG_ID_PARAM_NAME),
+  validateParamObjectId(PARAM_NAME.USER_ID_PARAM_NAME),
   validateRequestBodyWithSchema(userUpdateDtoSchema),
   UserController.updateUser,
 );

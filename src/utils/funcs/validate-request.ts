@@ -149,14 +149,16 @@ export function validateRequestQueryWithSchema<T extends RecordObject>(
  * @param paramName Param name.
  */
 export function validateParamObjectId(paramName: (typeof PARAM_NAME)[keyof typeof PARAM_NAME]) {
-  return (req: AppRequest<unknown, unknown, ParamName>, _res: Response, next: NextFunction) => {
+  return (req: AppRequest<unknown, unknown, ParamName>, res: Response, next: NextFunction) => {
     if (isValidObjectId(req.params[paramName])) {
       next();
       return;
     }
-    generateErrorWithCode({
-      code: ErrorCode.InternalServer,
-      message: `Invalid object ID for ${paramName}.`,
-    });
+    res.status(ErrorCode.InternalServer).send(
+      generateErrorWithCode({
+        code: ErrorCode.InternalServer,
+        message: `Invalid object ID for param: ${paramName}`,
+      }),
+    );
   };
 }
