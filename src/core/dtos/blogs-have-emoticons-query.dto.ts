@@ -5,5 +5,5 @@ export interface BlogsHaveEmoticonsQueryDto {
 }
 
 export const blogsHaveEmoticonsQueryDtoSchema = Joi.object<BlogsHaveEmoticonsQueryDto>({
-  blogIds: Joi.array().items(Joi.string()),
+  blogIds: Joi.array().items(Joi.string()).required(),
 });

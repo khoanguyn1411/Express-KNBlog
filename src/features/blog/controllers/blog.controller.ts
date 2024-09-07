@@ -79,8 +79,10 @@ export namespace BlogController {
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
     assertNonNull(user);
 
+    const blogsId = req.query.blogIds;
+
     const emoticonRequests = await Promise.all(
-      req.query.blogIds.map((blogId) =>
+      blogsId.map((blogId) =>
         BlogEmoticonDB.Model.findOne({ blog: blogId, user: user._id }, undefined, { lean: true }),
       ),
     );
