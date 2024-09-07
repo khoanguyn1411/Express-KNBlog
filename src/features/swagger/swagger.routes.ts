@@ -28,6 +28,7 @@ const router = Router();
   //   definition: swaggerDefinition,
   //   apis: ["../**/*.routes.ts"],
   // });
+  
 router.use(routePaths.docs.url, serve, setup(SwaggerJson));
 
 export const swaggerRoutes = router.all("*");
