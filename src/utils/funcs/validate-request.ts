@@ -156,6 +156,9 @@ export function validateParamObjectId(paramName: (typeof PARAM_NAME)[keyof typeo
       next();
       return;
     }
-    generateErrorWithCode({ code: ErrorCode.InternalServer, message: "Invalid object ID." });
+    generateErrorWithCode({
+      code: ErrorCode.InternalServer,
+      message: `Invalid object ID for ${paramName}.`,
+    });
   };
 }
