@@ -4,6 +4,8 @@ import { serve, setup } from "swagger-ui-express";
 
 import { routePaths } from "@/routes/route-paths";
 
+import SwaggerJson from "./swagger.json";
+
 // Swagger definition
 const swaggerDefinition: swaggerJSDoc.Options["definition"] = {
   openapi: "3.0.0",
@@ -17,11 +19,11 @@ const swaggerDefinition: swaggerJSDoc.Options["definition"] = {
 // Initialize swagger-jsdoc
 const swaggerSpec = swaggerJSDoc({
   definition: swaggerDefinition,
-  apis: [],
+  apis: ["../**/*.routes.ts"],
 });
 
 const router = Router();
 
-router.use(routePaths.docs.url, serve, setup(swaggerSpec));
+router.use(routePaths.docs.url, serve, setup(SwaggerJson));
 
 export const swaggerRoutes = router.all("*");
