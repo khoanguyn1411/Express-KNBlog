@@ -11,9 +11,105 @@
       "description": "Local server"
     }
   ],
-  "tags": [{ "name": "users" }],
+  "tags": [{ "name": "users" }, { "name": "auth" }],
   "paths": {
-    "/users": {
+    "/auth/login/": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register/": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout/": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "description": "Logout",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/refresh-token/": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Refresh token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshToken"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/": {
       "get": {
         "tags": ["users"],
         "summary": "Retrieve a list of users",
@@ -31,7 +127,7 @@
         }
       }
     },
-    "/users/profile": {
+    "/users/profile/": {
       "get": {
         "tags": ["users"],
         "summary": "Retrieve user profile",
@@ -68,6 +164,7 @@
       },
       "post": {
         "tags": ["users"],
+        "summary": "Update user",
         "requestBody": {
           "required": true,
           "content": {
@@ -129,6 +226,72 @@
           }
         }
       },
+      "Login": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Register": {
+        "type": "object",
+        "required": ["email", "password", "lastName", "firstName"],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "required": ["accessToken", "refreshToken"],
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "RefreshToken": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "required": ["pictureUrl", "firstName", "lastName"],
+        "properties": {
+          "pictureUrl": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
       "Pagination": {
         "type": "object",
         "properties": {
@@ -165,21 +328,6 @@
             }
           }
         ]
-      },
-      "UserUpdate": {
-        "type": "object",
-        "required": ["pictureUrl", "firstName", "lastName"],
-        "properties": {
-          "pictureUrl": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          }
-        }
       }
     }
   }
