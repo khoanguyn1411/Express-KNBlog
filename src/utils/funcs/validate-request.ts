@@ -80,9 +80,10 @@ export function generateValidationError<TSchema extends RecordObject>(error?: Jo
     if (cur.context == null || cur.context.key == null) {
       return acc;
     }
+    const key = cur.context.label ?? cur.context.key;
     return {
       ...acc,
-      [cur.context.key]: getValidationCustomMessage(cur),
+      [key]: getValidationCustomMessage(cur),
     };
   }, {}) as ErrorData<TSchema>;
   return validationError;
@@ -94,7 +95,7 @@ export function generateValidationError<TSchema extends RecordObject>(error?: Jo
  * @param req The Express request object containing the request body.
  */
 function validateRequestBody<TSchema extends RecordObject>({ schema, req }: RequestInput<TSchema>) {
-  const { error } = schema.validate(req.body);
+  const { error } = schema.validate(req.body, { abortEarly: false });
   return generateValidationError(error);
 }
 
@@ -107,7 +108,7 @@ function validateRequestQuery<TSchema extends RecordObject>({
   schema,
   req,
 }: RequestInput<TSchema>) {
-  const { error } = schema.validate(req.query);
+  const { error } = schema.validate(req.query, { abortEarly: false });
   return generateValidationError(error);
 }
 
