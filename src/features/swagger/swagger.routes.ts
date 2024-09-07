@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Router } from "express";
 import { serve, setup } from "swagger-ui-express";
 
@@ -12,21 +13,21 @@ const router = Router();
  * @see https://www.npmjs.com/package/swagger-jsdoc?activeTab=readme
  * @example
  */
-// // Swagger definition
-// const swaggerDefinition: swaggerJSDoc.Options["definition"] = {
-//   openapi: "3.0.0",
-//   info: {
-//     title: "My Express API",
-//     version: "1.0.0",
-//     description: "API documentation for my Express application",
-//   },
-// };
+  //   // Swagger definition
+  // const swaggerDefinition: swaggerJSDoc.Options["definition"] = {
+  //   openapi: "3.0.0",
+  //   info: {
+  //     title: "My Express API",
+  //     version: "1.0.0",
+  //     description: "API documentation for my Express application",
+  //   },
+  // };
 
-// // Initialize swagger-jsdoc
-// const swaggerSpec = swaggerJSDoc({
-//   definition: swaggerDefinition,
-//   apis: ["../**/*.routes.ts"],
-// });
+  //   // Initialize swagger-jsdoc
+  // const swaggerSpec = swaggerJSDoc({
+  //   definition: swaggerDefinition,
+  //   apis: ["../**/*.routes.ts"],
+  // });
 router.use(routePaths.docs.url, serve, setup(SwaggerJson));
 
 export const swaggerRoutes = router.all("*");
