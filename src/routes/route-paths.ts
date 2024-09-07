@@ -77,6 +77,12 @@ const uploadRoutePath = buildRoutePaths({
   },
 } as const);
 
+const swaggerRoutePath = buildRoutePaths({
+  docs: {
+    path: "api-docs",
+  },
+} as const);
+
 /** Route paths can be used throughout the project. */
 export const routePaths = {
   ...baseRoutePaths,
@@ -85,4 +91,5 @@ export const routePaths = {
   ...blogRoutePaths,
   ...blogEmoticonRoutePaths,
   ...uploadRoutePath,
+  ...swaggerRoutePath,
 };
