@@ -4,11 +4,12 @@ import { blogCreationDtoSchema, blogQueryDtoSchema } from "@/core/dtos/blog.dto"
 import { blogsHaveEmoticonsQueryDtoSchema } from "@/core/dtos/blogs-have-emoticons-query.dto";
 import { requireAuthorizationMiddleware } from "@/middlewares/require-authorization.middleware";
 import {
+  validateParamObjectId,
   validateRequestBodyWithSchema,
   validateRequestQueryWithSchema,
 } from "@/utils/funcs/validate-request";
 
-import { routePaths } from "../../routes/route-paths";
+import { PARAM_NAME, routePaths } from "../../routes/route-paths";
 import { BlogController } from "./controllers/blog.controller";
 
 const router = Router();
@@ -26,7 +27,11 @@ router.get(
 );
 
 // Need to move dynamic URL to the bottom of all the route, to avoid Express understand the others as an dynamic URL.
-router.get(routePaths.blogs.children.detail.url, BlogController.getBlogById);
+router.get(
+  routePaths.blogs.children.detail.url,
+  validateParamObjectId(PARAM_NAME.BLOG_ID_PARAM_NAME),
+  BlogController.getBlogById,
+);
 
 router.post(
   routePaths.blogs.url,

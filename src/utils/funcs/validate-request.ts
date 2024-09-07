@@ -1,8 +1,10 @@
 import { NextFunction, Response } from "express";
 import Joi, { ValidationErrorItem } from "joi";
+import { isValidObjectId } from "mongoose";
 
 import { ErrorCode } from "@/configs/app/code.config";
 import { RecordObject } from "@/routes/build-route-paths";
+import { PARAM_NAME, ParamName } from "@/routes/route-paths";
 
 import { Nullable } from "../types/nullable";
 import { AppRequest } from "../types/request";
@@ -141,5 +143,19 @@ export function validateRequestQueryWithSchema<T extends RecordObject>(
       return;
     }
     sendValidationErrorResponse(res, validationError);
+  };
+}
+
+/**
+ * Validate param object ID.
+ * @param paramName Param name.
+ */
+export function validateParamObjectId(paramName: (typeof PARAM_NAME)[keyof typeof PARAM_NAME]) {
+  return (req: AppRequest<unknown, unknown, ParamName>, _res: Response, next: NextFunction) => {
+    if (isValidObjectId(req.params[paramName])) {
+      next();
+      return;
+    }
+    generateErrorWithCode({ code: ErrorCode.InternalServer, message: "Invalid object ID." });
   };
 }
