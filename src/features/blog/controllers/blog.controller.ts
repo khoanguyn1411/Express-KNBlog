@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 
 import { ErrorCode, SuccessCode } from "@/configs/app/code.config";
 import { BlogDB, MBlog } from "@/core/db-models/blog.db";
+import { BlogEmoticonDB } from "@/core/db-models/blog-emoticon.db";
 import { BlogCreationDto, BlogQueryDto } from "@/core/dtos/blog.dto";
 import { blogMapper } from "@/core/mapper/blog.mapper";
 import { Pagination } from "@/core/models/pagination";
@@ -68,5 +69,30 @@ export namespace BlogController {
     }
     const aggregatedResult = await BlogDB.getAggregatedResult(blog, user);
     res.status(SuccessCode.Accepted).send(aggregatedResult);
+  }
+
+  export async function getBlogsHaveEmoticons(
+    req: AppRequest<{ readonly blogIds: MBlog["_id"][] }>,
+    res: Response<MBlog["_id"][]>,
+  ): Promise<void> {
+    const user = await tokenHandlerService.getUserFromHeaderToken(req);
+    assertNonNull(user);
+
+    console.log(req.body);
+
+    const emoticonRequests = await Promise.all(
+      req.body.blogIds.map((blogId) =>
+        BlogEmoticonDB.Model.findOne({ blog: blogId, user: user._id }, undefined, { lean: true }),
+      ),
+    );
+
+    const cleanedEmoticons = emoticonRequests
+      .filter((emoticon) => emoticon != null)
+      .map((emoticon) => {
+        assertNonNull(emoticon);
+        return emoticon.blog._id;
+      });
+
+    res.status(SuccessCode.Accepted).send(cleanedEmoticons);
   }
 }

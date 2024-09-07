@@ -48,6 +48,9 @@ const blogRoutePaths = buildRoutePaths({
       detail: {
         path: `:${PARAM_NAME.BLOG_ID_PARAM_NAME}`,
       },
+      blogsHaveEmoticons: {
+        path: "blogs-have-emoticons",
+      },
     },
   },
 } as const);

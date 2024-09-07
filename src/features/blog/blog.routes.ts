@@ -18,6 +18,11 @@ router.get(
   BlogController.getBlogs,
 );
 router.get(routePaths.blogs.children.detail.url, BlogController.getBlogById);
+router.get(
+  routePaths.blogs.children.blogsHaveEmoticons.url,
+  requireAuthorizationMiddleware,
+  BlogController.getBlogsHaveEmoticons,
+);
 router.post(
   routePaths.blogs.url,
   requireAuthorizationMiddleware,
