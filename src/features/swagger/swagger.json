@@ -9,8 +9,8 @@
     { "name": "auth" },
     { "name": "users" },
     { "name": "blogs" },
-    { "name": "upload" },
-    { "name": "emoticon" }
+    { "name": "blog-emoticon" },
+    { "name": "upload" }
   ],
   "paths": {
     "/auth/google-login/": {
@@ -446,9 +446,9 @@
         }
       }
     },
-    "/emoticon/": {
+    "/blog-emoticon/": {
       "post": {
-        "tags": ["emoticon"],
+        "tags": ["blog-emoticon"],
         "summary": "Add emoticon to a blog",
         "requestBody": {
           "required": true,
@@ -479,9 +479,9 @@
         }
       }
     },
-    "/emoticon/{blogId}/": {
+    "/blog-emoticon/{blogId}/": {
       "delete": {
-        "tags": ["emoticon"],
+        "tags": ["blog-emoticon"],
         "summary": "Remove emoticon from a blog",
         "parameters": [
           {
@@ -507,7 +507,19 @@
       }
     }
   },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "parameters": {
       "OffsetParam": {
         "name": "offset",
