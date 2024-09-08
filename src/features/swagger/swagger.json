@@ -11,8 +11,36 @@
       "description": "Local server"
     }
   ],
-  "tags": [{ "name": "users" }, { "name": "auth" }],
+  "tags": [{ "name": "users" }, { "name": "auth" }, { "name": "blogs" }],
   "paths": {
+    "/auth/google-login/": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login (or register) with Google",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/login/": {
       "post": {
         "tags": ["auth"],
@@ -188,6 +216,105 @@
           }
         }
       }
+    },
+    "/blogs/": {
+      "get": {
+        "tags": ["blogs"],
+        "summary": "Retrieve a list of blogs",
+        "responses": {
+          "200": {
+            "description": "A list of blogs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedBlog"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "description": "User ID",
+            "schema": { "type": "string" },
+            "in": "query"
+          }
+        ]
+      },
+      "post": {
+        "tags": ["blogs"],
+        "summary": "Create blog",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlogCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Blog",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blogs/{blogId}/": {
+      "get": {
+        "tags": ["blogs"],
+        "summary": "Retrieve blog detail",
+        "responses": {
+          "200": {
+            "description": "Blog",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Blog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blogs/blogs-have-emoticons/": {
+      "get": {
+        "tags": ["blogs"],
+        "summary": "Retrieve blog IDs which have emoticons",
+        "parameters": [
+          {
+            "name": "blogIds[]",
+            "description": "Blog IDs to check",
+            "schema": { "type": "string" },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blogs have emoticons",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -256,6 +383,27 @@
           }
         }
       },
+      "GoogleLogin": {
+        "type": "object",
+        "required": ["googleTokenId", "pictureUrl", "lastName", "firstName", "email"],
+        "properties": {
+          "googleTokenId": {
+            "type": "string"
+          },
+          "pictureUrl": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
       "Token": {
         "type": "object",
         "required": ["accessToken", "refreshToken"],
@@ -273,6 +421,57 @@
         "required": ["refreshToken"],
         "properties": {
           "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "Blog": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "bannerUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "emoticonCount": {
+            "type": "integer"
+          },
+          "isUserLiked": {
+            "type": "boolean"
+          },
+          "writtenBy": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "BlogCreate": {
+        "type": "object",
+        "required": ["title", "content", "summary"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "summary": {
             "type": "string"
           }
         }
@@ -324,6 +523,23 @@
                   "$ref": "#/components/schemas/User"
                 },
                 "description": "List of User objects"
+              }
+            }
+          }
+        ]
+      },
+      "PaginatedBlog": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Pagination" },
+          {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Blog"
+                },
+                "description": "List of Blog objects"
               }
             }
           }
