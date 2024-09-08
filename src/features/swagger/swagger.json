@@ -7,11 +7,17 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000/api-docs",
+      "url": "http://localhost:8000/",
       "description": "Local server"
     }
   ],
-  "tags": [{ "name": "users" }, { "name": "auth" }, { "name": "blogs" }],
+  "tags": [
+    { "name": "users" },
+    { "name": "auth" },
+    { "name": "blogs" },
+    { "name": "upload" },
+    { "name": "emoticon" }
+  ],
   "paths": {
     "/auth/google-login/": {
       "post": {
@@ -141,6 +147,17 @@
       "get": {
         "tags": ["users"],
         "summary": "Retrieve a list of users",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SearchParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          }
+        ],
         "responses": {
           "200": {
             "description": "A list of users.",
@@ -177,6 +194,17 @@
       "get": {
         "tags": ["users"],
         "summary": "Retrieve user detail",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "User",
@@ -235,6 +263,15 @@
         },
         "parameters": [
           {
+            "$ref": "#/components/parameters/SearchParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/OffsetParam"
+          },
+          {
             "name": "userId",
             "description": "User ID",
             "schema": { "type": "string" },
@@ -273,6 +310,17 @@
       "get": {
         "tags": ["blogs"],
         "summary": "Retrieve blog detail",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the blog",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Blog",
@@ -315,9 +363,186 @@
           }
         }
       }
+    },
+    "/upload/image/": {
+      "post": {
+        "tags": ["upload"],
+        "summary": "Upload an image",
+        "operationId": "uploadFile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "$ref": "#/components/schemas/FileUpload"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Image uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "downloadUrl": {
+                      "type": "string"
+                    },
+                    "viewUrl": {
+                      "type": "string"
+                    },
+                    "driveViewUrl": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload/": {
+      "post": {
+        "tags": ["upload"],
+        "summary": "Upload a file",
+        "operationId": "uploadFile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "$ref": "#/components/schemas/FileUpload"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "downloadUrl": {
+                      "type": "string"
+                    },
+                    "viewUrl": {
+                      "type": "string"
+                    },
+                    "driveViewUrl": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emoticon/": {
+      "post": {
+        "tags": ["emoticon"],
+        "summary": "Add emoticon to a blog",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["blogId"],
+                "properties": {
+                  "blogId": {
+                    "type": "string",
+                    "description": "Blog ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/emoticon/{blogId}/": {
+      "delete": {
+        "tags": ["emoticon"],
+        "summary": "Remove emoticon from a blog",
+        "parameters": [
+          {
+            "name": "blogId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the blog",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
+    "parameters": {
+      "OffsetParam": {
+        "name": "offset",
+        "in": "query",
+        "description": "Page offset",
+        "schema": {
+          "type": "integer",
+          "default": 0
+        }
+      },
+      "LimitParam": {
+        "name": "limit",
+        "in": "query",
+        "description": "Page limit",
+        "schema": {
+          "type": "integer",
+          "default": 10
+        }
+      },
+      "SearchParam": {
+        "name": "search",
+        "in": "query",
+        "description": "Search query",
+        "schema": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
     "schemas": {
       "User": {
         "type": "object",
@@ -350,6 +575,32 @@
           "pictureUrl": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "required": ["pictureUrl", "firstName", "lastName"],
+        "properties": {
+          "pictureUrl": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "FileUpload": {
+        "type": "object",
+        "required": ["file"],
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "The file to upload"
           }
         }
       },
@@ -472,21 +723,6 @@
             "type": "string"
           },
           "summary": {
-            "type": "string"
-          }
-        }
-      },
-      "UserUpdate": {
-        "type": "object",
-        "required": ["pictureUrl", "firstName", "lastName"],
-        "properties": {
-          "pictureUrl": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
             "type": "string"
           }
         }
