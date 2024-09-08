@@ -39,7 +39,18 @@ export namespace BlogEmoticonController {
   ) {
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
     assertNonNull(user);
-    await BlogEmoticonDB.Model.deleteOne({ blog: req.params.blogId });
+    const deleteResult = await BlogEmoticonDB.Model.deleteOne({
+      blog: req.params.blogId,
+      user: user._id,
+    });
+
+    if (deleteResult.deletedCount === 0) {
+      res
+        .status(ErrorCode.BadData)
+        .send(generateErrorWithCode({ code: ErrorCode.BadData, message: "Emoticon not found." }));
+      return;
+    }
+
     res.sendStatus(SuccessCode.OK);
   }
 }
