@@ -39,7 +39,7 @@ const schema = new Schema<MBlog>(
     },
   },
   { timestamps: true },
-);
+).index({ title: "text" });
 
 export namespace BlogDB {
   export const Model = model(MODEL_NAMES.Blog, schema);

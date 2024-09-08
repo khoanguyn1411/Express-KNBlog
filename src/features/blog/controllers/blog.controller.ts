@@ -38,7 +38,7 @@ export namespace BlogController {
     const user = await tokenHandlerService.getUserFromHeaderToken(req);
 
     const filters = createFilters<MBlog>({
-      title: searchService.createSearchFor(queryParamFromDto.search),
+      ...searchService.createSearchFor(queryParamFromDto.search),
       writtenBy: queryParamFromDto.userId ? new ObjectId(queryParamFromDto.userId) : null,
     });
 

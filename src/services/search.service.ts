@@ -48,7 +48,7 @@ class SearchService {
    * @param searchQuery Search text query.
    */
   public createSearchFor<T>(searchQuery: string | null): RootQuerySelector<T> {
-    return { $regex: `^${searchQuery ?? ""}`, $options: "i" };
+    return { $text: { $search: searchQuery ?? "" } };
   }
 }
 
