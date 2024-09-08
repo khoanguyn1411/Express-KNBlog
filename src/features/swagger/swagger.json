@@ -191,20 +191,20 @@
       }
     },
     "/users/{userId}/": {
+      "parameters": [
+        {
+          "name": "blogId",
+          "in": "path",
+          "required": true,
+          "description": "The ID of the blog",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": ["users"],
         "summary": "Retrieve user detail",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "description": "The ID of the user",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "User",
