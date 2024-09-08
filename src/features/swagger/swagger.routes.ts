@@ -30,6 +30,6 @@ const swaggerDefinition: swaggerJSDoc.Options["swaggerDefinition"] = {
 //   apis: ["../**/*.routes.ts"],
 // });
 
-router.use(routePaths.docs.url, serve, setup({ ...swaggerDefinition, ...SwaggerJson }));
+router.use(routePaths.docs.url, serve, setup({ ...SwaggerJson, ...swaggerDefinition }));
 
 export const swaggerRoutes = router.all("*");
