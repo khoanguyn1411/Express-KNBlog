@@ -10,6 +10,7 @@ import SwaggerJson from "./swagger.json";
 const router = Router();
 
 // Swagger definition
+// Define the general information for swagger here instead of swagger.json file, for easier integrate with env and package json.
 const swaggerDefinition: swaggerJSDoc.Options["swaggerDefinition"] = {
   openapi: "3.0.0",
   info: {
