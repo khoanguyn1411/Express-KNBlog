@@ -1,10 +1,4 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "KNBLOG API",
-    "version": "1.0.0",
-    "description": "API documentation for my Express application"
-  },
   "servers": [
     {
       "url": "http://localhost:8000/",
@@ -12,8 +6,8 @@
     }
   ],
   "tags": [
-    { "name": "users" },
     { "name": "auth" },
+    { "name": "users" },
     { "name": "blogs" },
     { "name": "upload" },
     { "name": "emoticon" }
